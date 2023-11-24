@@ -1,0 +1,14 @@
+/* TODO: Добавьте здесь основные цвета */
+
+:root {
+  /* Основные цвета */
+  --disabled-color: #dde0e4;
+  --white-color: #ffffff;
+  --error-color: #ff0200;
+
+  /* Цвет текста */
+  --primary-text-color: #1a1b22;
+
+  /* Дополнительные цвета */
+  --green-color: #87cc9e;
+}
