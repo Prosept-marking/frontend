@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5ccc0785.css",
+    "main.js": "/static/js/main.619220fc.js",
+    "static/media/icon-prosepto.png": "/static/media/icon-prosepto.72e8b5c2aeaf8fd18f18.png",
+    "index.html": "/index.html",
+    "main.5ccc0785.css.map": "/static/css/main.5ccc0785.css.map",
+    "main.619220fc.js.map": "/static/js/main.619220fc.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5ccc0785.css",
+    "static/js/main.619220fc.js"
+  ]
+}
