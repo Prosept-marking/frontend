@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import EditButton from '../../components/EditButton/EditButton';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -25,25 +26,54 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:last-child td, &:last-child th': {
     border: 0,
   },
+
+  //change curson on pointer
+  '&: hover': {
+    cursor: 'pointer',
+  },
+
+  '&: active': {
+    backgroundColor: theme.palette.warning.light,
+  },
 }));
 
 function createData(
   name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
+  linkItem: string,
+  price: number,
+  dialer: string,
+  receiveDate: string,
+  status: string,
+  matchItem: string,
 ) {
-  return { name, calories, fat, carbs, protein };
+  return { name, linkItem, price, dialer, receiveDate, status, matchItem };
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData(
+    'Frozen yoghurt',
+    'www',
+    159,
+    'OZON',
+    '01.01.1980',
+    'no',
+    'Frozen yoghurt',
+  ),
+  createData(
+    'Ice cream sandwich',
+    'www',
+    237,
+    'OZON',
+    '01.01.1980',
+    'no',
+    'labuda',
+  ),
+  createData('Eclair', 'www', 262, 'OZON', '01.01.1980', 'no', 'labuda'),
+  createData('Cupcake', 'www', 305, 'OZON', '01.01.1980', 'no', 'labuda'),
+  createData('Gingerbread', 'www', 356, 'OZON', '01.01.1980', 'no', 'labuda'),
 ];
+
+function handleTableRowClick() {}
 
 export default function Main() {
   return (
@@ -51,23 +81,39 @@ export default function Main() {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-            <StyledTableCell align="right">Calories</StyledTableCell>
-            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+            <StyledTableCell>Наименование товара</StyledTableCell>
+            <StyledTableCell align="right">Ссылка на товар</StyledTableCell>
+            <StyledTableCell align="right">Цена</StyledTableCell>
+            <StyledTableCell align="right">Дилер</StyledTableCell>
+            <StyledTableCell align="right">
+              Дата получения записи
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              Статус (размечен или нет)
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              Товар для сопоставления
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              Режим редактирования
+            </StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <StyledTableRow key={row.name}>
+            <StyledTableRow key={row.name} onClick={handleTableRowClick}>
               <StyledTableCell component="th" scope="row">
                 {row.name}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
+              <StyledTableCell align="right">{row.linkItem}</StyledTableCell>
+              <StyledTableCell align="right">{row.price}</StyledTableCell>
+              <StyledTableCell align="right">{row.dialer}</StyledTableCell>
+              <StyledTableCell align="right">{row.receiveDate}</StyledTableCell>
+              <StyledTableCell align="right">{row.status}</StyledTableCell>
+              <StyledTableCell align="right">{row.matchItem}</StyledTableCell>
+              <StyledTableCell align="right">
+                <EditButton caption="Перейти в режим разметки" />
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
