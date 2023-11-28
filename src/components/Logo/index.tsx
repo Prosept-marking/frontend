@@ -1,5 +1,8 @@
-import logoPath from './../../assets/images/icon-prosepto.png';
-
 export default function Logo() {
-  return <img src={logoPath} alt="Логотип проекта"></img>;
+  return (
+    <img
+      src="https://prosept.ru/images/prosept-logo.svg"
+      alt="Логотип проекта"
+    ></img>
+  );
 }

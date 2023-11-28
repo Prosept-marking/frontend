@@ -7,10 +7,12 @@ import Root from './root';
 
 import ProtectedRoute from '../HOC/ProtectedRoute';
 import { ProtectedRouteProps } from '../HOC/ProtectedRoute';
-import Registration from '../pages/Registration/Registration';
-import Login from '../pages/Login/Login';
+import Registration from '../pages/Registration';
+import Login from '../pages/Login';
 import ErrorBoundary from './ErrorBoundary';
-import Main from '../components/Main';
+import Main from '../pages/Main';
+import Compare from '../pages/Compare';
+import Statistics from '../pages/Statistics';
 
 const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'outlet'> = {
   isAuthenticated: true,
@@ -37,6 +39,8 @@ const router = createBrowserRouter(
         errorElement={<ErrorBoundary />}
       >
         <Route path="/" element={<Main />} />
+        <Route path="/compare" element={<Compare />} />
+        <Route path="/statistics" element={<Statistics />} />
       </Route>
     </>,
   ),

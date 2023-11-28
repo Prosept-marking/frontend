@@ -7,11 +7,11 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 
-type Anchor = 'left';
+type Anchor = 'right';
 
 export default function Navigation() {
   const [state, setState] = React.useState({
-    left: false,
+    right: false,
   });
 
   const toggleDrawer =
@@ -56,21 +56,14 @@ export default function Navigation() {
                 ? 'navigation-link'
                 : 'navigation-link navigation-link_active'
             }
-            to="/favourite"
+            to="/compare"
           >
             Поиск совпадений
           </NavLink>
         </li>
         <li className="navigation-list__item">
-          <Link className="navigation-link" to="#">
+          <Link className="navigation-link" to="/statistics">
             Аналитика
-          </Link>
-        </li>
-      </ul>
-      <ul className="navigation-list">
-        <li className="navigation-list__item">
-          <Link className="navigation-link" to="#">
-            Выход
           </Link>
         </li>
       </ul>
@@ -79,9 +72,15 @@ export default function Navigation() {
 
   return (
     <div>
-      {(['left'] as const).map((anchor) => (
+      {(['right'] as const).map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>Меню</Button>
+          <Button
+            onClick={toggleDrawer(anchor, true)}
+            color="secondary"
+            sx={{ fontSize: '1.5rem' }}
+          >
+            Меню
+          </Button>
           <Drawer
             anchor={anchor}
             open={state[anchor]}
