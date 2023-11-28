@@ -35,6 +35,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
   '&: active': {
     backgroundColor: theme.palette.warning.light,
+    transition: 'background-color 2.5s, transform 2s',
   },
 }));
 
@@ -74,8 +75,6 @@ const rows = [
   createData('Gingerbread', 'www', 356, 'OZON', '01.01.1980', 'no', 'labuda'),
 ];
 
-function handleTableRowClick() {}
-
 export default function Main() {
   return (
     <main className="main">
@@ -105,7 +104,7 @@ export default function Main() {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <StyledTableRow key={row.name} onClick={handleTableRowClick}>
+              <StyledTableRow key={row.name}>
                 <StyledTableCell component="th" scope="row">
                   {row.name}
                 </StyledTableCell>
