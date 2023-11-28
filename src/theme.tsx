@@ -5,13 +5,12 @@ import './assets/fonts/fonts.css';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#5a9bff', // Основной синий цвет
-      dark: '#1d6bf3', // Темный синий для активных элементов
-      light: '#F1F6FF', // Светлый синий
+      main: '#007d42', // Основной зеленый цвет
+      light: '#409e72', // Светлый синий
       contrastText: '#fff',
     },
     secondary: {
-      main: '#87cc9e', // Зеленый вторичный цвет
+      main: '#409e72', // Зеленый вторичный цвет
     },
     error: {
       main: '#ff0200', // Цвет ошибки

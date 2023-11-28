@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import './Navigation.scss';
 
@@ -62,9 +62,16 @@ export default function Navigation() {
           </NavLink>
         </li>
         <li className="navigation-list__item">
-          <Link className="navigation-link" to="/statistics">
-            Аналитика
-          </Link>
+          <NavLink
+            className={({ isActive }) =>
+              !isActive
+                ? 'navigation-link'
+                : 'navigation-link navigation-link_active'
+            }
+            to="/statistics"
+          >
+            Статистика
+          </NavLink>
         </li>
       </ul>
     </Box>
