@@ -6,8 +6,8 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#007d42', // Основной зеленый цвет
-      light: '#409e72', // Светлый синий
-      contrastText: '#fff',
+      light: '#9fceb8', // Светлый синий
+      dark: '#409e72',
     },
     secondary: {
       main: '#409e72', // Зеленый вторичный цвет

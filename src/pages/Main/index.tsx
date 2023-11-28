@@ -30,12 +30,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
   //change curson on pointer
   '&: hover': {
-    cursor: 'pointer',
-  },
-
-  '&: active': {
-    backgroundColor: theme.palette.warning.light,
-    transition: 'background-color 2.5s, transform 2s',
+    backgroundColor: theme.palette.primary.light,
+    transition: 'background-color .5s, transform 2s',
   },
 }));
 

@@ -1,6 +1,6 @@
 import { Divider, Stack } from '@mui/material';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { BasicButton } from './../Button';
+import { BasicButton } from '../BasicButton';
 import { useEffect, useState } from 'react';
 import { Title } from './../Title';
 import { filterSearch } from '../../utils/api';
@@ -45,15 +45,15 @@ export default function FilterList() {
           borderColor="action.disabledBackground"
           justifyContent="center"
           alignItems="center"
-          padding={6}
+          alignContent="center"
+          margin={5}
+          padding={3}
           gap={2}
           direction="row"
           flexWrap="wrap"
           position="sticky"
           borderRadius={1}
           right={0}
-          top={10}
-          maxHeight={870}
           sx={{ overflowY: 'auto' }}
         >
           <Title title="Фильтры" color="text.secondary" fontSize={14} />
@@ -73,8 +73,8 @@ export default function FilterList() {
           </Stack>
           <Divider />
           <Stack direction="row" sx={{ gap: 5 }}>
-            <BasicButton text="Сохранить" type="submit" isFiltersUsed />
-            <BasicButton text="Сбросить" type="reset" isFiltersUsed />
+            <BasicButton text="Применить" type="submit" />
+            {/* <BasicButton text="Сбросить" type="reset" onClick={() => methods.reset({})}/> */}
           </Stack>
         </Stack>
       </form>

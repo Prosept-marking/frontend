@@ -8,7 +8,7 @@ import theme from '../theme';
 const App: FC = () => {
   return (
     <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 };

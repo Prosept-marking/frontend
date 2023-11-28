@@ -3,10 +3,9 @@ import { FC } from 'react';
 
 export const BasicButton: FC<{
   text: string;
-  isFiltersUsed?: boolean;
   type?: 'button' | 'submit' | 'reset' | undefined;
-  handleClick?: () => void;
-}> = ({ text, isFiltersUsed, type, handleClick }) => {
+  onClick?: () => void;
+}> = ({ text, type, onClick }) => {
   return (
     <Button
       sx={{
@@ -15,8 +14,7 @@ export const BasicButton: FC<{
       }}
       variant="contained"
       type={type}
-      disabled={!isFiltersUsed}
-      onClick={handleClick}
+      onClick={onClick}
       color={type === 'reset' ? 'error' : 'primary'}
     >
       {text}
