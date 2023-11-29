@@ -32,7 +32,7 @@ export const DilerCard: FC<{
         </Typography>
         <Typography variant="body2">Дата получения: {date}</Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Id дилера: {dealer_id}
+          Дилер: {dealer_id}
         </Typography>
       </CardContent>
       <CardActions>

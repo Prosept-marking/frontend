@@ -7,7 +7,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import EditButton from '../../components/EditButton/EditButton';
-import FilterList from '../../components/FilterList';
+import { Link } from 'react-router-dom';
+import { Button, Tooltip } from '@mui/material';
+import DoneIcon from '../../assets/icons/DoneIcon';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,8 +43,8 @@ function createData(
   price: number,
   dialer: string,
   receiveDate: string,
-  status: string,
-  matchItem: string,
+  status: boolean,
+  matchItem?: string,
 ) {
   return { name, linkItem, price, dialer, receiveDate, status, matchItem };
 }
@@ -50,50 +52,67 @@ function createData(
 const rows = [
   createData(
     'Frozen yoghurt',
-    'www',
+    'https://github.com/orgs/Prosept-marking/projects/3/views/4',
     159,
     'OZON',
     '01.01.1980',
-    'no',
+    true,
     'Frozen yoghurt',
   ),
   createData(
     'Ice cream sandwich',
-    'www',
+    'https://github.com/orgs/Prosept-marking/projects/3/views/4',
     237,
     'OZON',
     '01.01.1980',
-    'no',
+    false,
+  ),
+  createData(
+    'Eclair',
+    'https://github.com/orgs/Prosept-marking/projects/3/views/4',
+    262,
+    'OZON',
+    '01.01.1980',
+    false,
+  ),
+  createData(
+    'Cupcake',
+    'https://github.com/orgs/Prosept-marking/projects/3/views/4',
+    305,
+    'OZON',
+    '01.01.1980',
+    false,
+  ),
+  createData(
+    'Gingerbread',
+    'https://github.com/orgs/Prosept-marking/projects/3/views/4',
+    356,
+    'OZON',
+    '01.01.1980',
+    true,
     'labuda',
   ),
-  createData('Eclair', 'www', 262, 'OZON', '01.01.1980', 'no', 'labuda'),
-  createData('Cupcake', 'www', 305, 'OZON', '01.01.1980', 'no', 'labuda'),
-  createData('Gingerbread', 'www', 356, 'OZON', '01.01.1980', 'no', 'labuda'),
 ];
 
 export default function Main() {
   return (
-    <main className="main">
-      <FilterList />
-
+    <>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell>Наименование товара</StyledTableCell>
-              <StyledTableCell align="right">Ссылка на товар</StyledTableCell>
-              <StyledTableCell align="right">Цена</StyledTableCell>
-              <StyledTableCell align="right">Дилер</StyledTableCell>
-              <StyledTableCell align="right">
+              <StyledTableCell align="center">Ссылка на товар</StyledTableCell>
+              <StyledTableCell align="center">Цена</StyledTableCell>
+              <StyledTableCell align="center">Дилер</StyledTableCell>
+              <StyledTableCell align="center">
                 Дата получения записи
               </StyledTableCell>
-              <StyledTableCell align="right">
-                Статус (размечен или нет)
+              <StyledTableCell align="center">Статус</StyledTableCell>
+              <StyledTableCell align="center">
+                Сопоставленный товар
               </StyledTableCell>
-              <StyledTableCell align="right">
-                Товар для сопоставления
-              </StyledTableCell>
-              <StyledTableCell align="right">
+              <StyledTableCell align="center">
                 Режим редактирования
               </StyledTableCell>
             </TableRow>
@@ -104,15 +123,34 @@ export default function Main() {
                 <StyledTableCell component="th" scope="row">
                   {row.name}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.linkItem}</StyledTableCell>
-                <StyledTableCell align="right">{row.price}</StyledTableCell>
-                <StyledTableCell align="right">{row.dialer}</StyledTableCell>
-                <StyledTableCell align="right">
+                <StyledTableCell align="center">
+                  <Link to={row.linkItem}>
+                    {' '}
+                    <Tooltip title={row.linkItem}>
+                      <Button>url</Button>
+                    </Tooltip>
+                  </Link>
+                </StyledTableCell>
+                <StyledTableCell align="center">{row.price}</StyledTableCell>
+                <StyledTableCell align="center">{row.dialer}</StyledTableCell>
+                <StyledTableCell align="center">
                   {row.receiveDate}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.status}</StyledTableCell>
-                <StyledTableCell align="right">{row.matchItem}</StyledTableCell>
-                <StyledTableCell align="right">
+                <StyledTableCell align="center">
+                  {row.status ? (
+                    <Tooltip title="Cовпадение подтверждено">
+                      <span>
+                        <DoneIcon />
+                      </span>
+                    </Tooltip>
+                  ) : (
+                    ''
+                  )}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.matchItem}
+                </StyledTableCell>
+                <StyledTableCell align="center">
                   <EditButton caption="Перейти в режим разметки" />
                 </StyledTableCell>
               </StyledTableRow>
@@ -120,6 +158,6 @@ export default function Main() {
           </TableBody>
         </Table>
       </TableContainer>
-    </main>
+    </>
   );
 }

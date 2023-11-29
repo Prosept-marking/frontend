@@ -10,7 +10,7 @@ import { ProtectedRouteProps } from '../HOC/ProtectedRoute';
 import Registration from '../pages/Registration';
 import Login from '../pages/Login';
 import ErrorBoundary from './ErrorBoundary';
-import Main from '../pages/Main';
+import MainPage from '../pages/MainPage';
 import Compare from '../pages/Compare';
 import Statistics from '../pages/Statistics';
 
@@ -38,7 +38,7 @@ const router = createBrowserRouter(
         }
         errorElement={<ErrorBoundary />}
       >
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<MainPage />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="/statistics" element={<Statistics />} />
       </Route>
