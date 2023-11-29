@@ -1,11 +1,12 @@
 import { Outlet } from 'react-router-dom';
 
 import './Root.scss';
+import Header from '../../components/Header';
 
 function Root() {
   return (
     <div className="root">
-      <aside className="root__side-menu">Инфа</aside>
+      <Header />
       <Outlet />
     </div>
   );
