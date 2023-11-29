@@ -3,7 +3,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { BasicButton } from '../BasicButton';
 import { useEffect, useState } from 'react';
 import { Title } from './../Title';
-import { filterSearch } from '../../utils/api';
+// import { filterSearch } from '../../utils/api';
 import CheckboxLabel from './../CheckboxLabel';
 
 interface IFormProps {
