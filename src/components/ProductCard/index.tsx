@@ -22,7 +22,6 @@ export const ProductCard: FC<{
       <CardContent>
         <Box display={'flex'} gap={1} flexDirection={'column'}>
           <Box display={'flex'} flexDirection={'column'}>
-            {' '}
             <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.secondary">
               Название товара (1С):
             </Typography>

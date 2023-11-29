@@ -39,7 +39,8 @@ const router = createBrowserRouter(
         errorElement={<ErrorBoundary />}
       >
         <Route path="/" element={<MainPage />} />
-        <Route path="/compare" element={<Compare />} />
+        <Route path="/compare/" element={<Compare />} />
+        <Route path="/compare/:id" element={<Compare />} />
         <Route path="/statistics" element={<Statistics />} />
       </Route>
     </>,

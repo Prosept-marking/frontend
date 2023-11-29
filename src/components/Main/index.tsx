@@ -6,10 +6,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import EditButton from '../../components/EditButton/EditButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Tooltip } from '@mui/material';
 import DoneIcon from '../../assets/icons/DoneIcon';
+import { BasicButton } from '../BasicButton';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -38,6 +38,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function createData(
+  id: number,
   name: string,
   linkItem: string,
   price: number,
@@ -46,11 +47,12 @@ function createData(
   status: boolean,
   matchItem?: string,
 ) {
-  return { name, linkItem, price, dialer, receiveDate, status, matchItem };
+  return { id, name, linkItem, price, dialer, receiveDate, status, matchItem };
 }
 
 const rows = [
   createData(
+    1,
     'Frozen yoghurt',
     'https://github.com/orgs/Prosept-marking/projects/3/views/4',
     159,
@@ -60,6 +62,7 @@ const rows = [
     'Frozen yoghurt',
   ),
   createData(
+    2,
     'Ice cream sandwich',
     'https://github.com/orgs/Prosept-marking/projects/3/views/4',
     237,
@@ -68,6 +71,7 @@ const rows = [
     false,
   ),
   createData(
+    3,
     'Eclair',
     'https://github.com/orgs/Prosept-marking/projects/3/views/4',
     262,
@@ -76,6 +80,7 @@ const rows = [
     false,
   ),
   createData(
+    4,
     'Cupcake',
     'https://github.com/orgs/Prosept-marking/projects/3/views/4',
     305,
@@ -84,6 +89,7 @@ const rows = [
     false,
   ),
   createData(
+    5,
     'Gingerbread',
     'https://github.com/orgs/Prosept-marking/projects/3/views/4',
     356,
@@ -95,6 +101,7 @@ const rows = [
 ];
 
 export default function Main() {
+  const navigate = useNavigate();
   return (
     <>
       <TableContainer component={Paper}>
@@ -102,16 +109,17 @@ export default function Main() {
           <TableHead>
             <TableRow>
               <StyledTableCell>Наименование товара</StyledTableCell>
+              <StyledTableCell align="center">Статус</StyledTableCell>
+              <StyledTableCell align="center">
+                Сопоставленный товар
+              </StyledTableCell>
               <StyledTableCell align="center">Ссылка на товар</StyledTableCell>
               <StyledTableCell align="center">Цена</StyledTableCell>
               <StyledTableCell align="center">Дилер</StyledTableCell>
               <StyledTableCell align="center">
                 Дата получения записи
               </StyledTableCell>
-              <StyledTableCell align="center">Статус</StyledTableCell>
-              <StyledTableCell align="center">
-                Сопоставленный товар
-              </StyledTableCell>
+
               <StyledTableCell align="center">
                 Режим редактирования
               </StyledTableCell>
@@ -122,19 +130,6 @@ export default function Main() {
               <StyledTableRow key={row.name}>
                 <StyledTableCell component="th" scope="row">
                   {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <Link to={row.linkItem}>
-                    {' '}
-                    <Tooltip title={row.linkItem}>
-                      <Button>url</Button>
-                    </Tooltip>
-                  </Link>
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.price}</StyledTableCell>
-                <StyledTableCell align="center">{row.dialer}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.receiveDate}
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   {row.status ? (
@@ -151,7 +146,26 @@ export default function Main() {
                   {row.matchItem}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <EditButton caption="Перейти в режим разметки" />
+                  <Link to={row.linkItem}>
+                    <Tooltip title={row.linkItem}>
+                      <Button>url</Button>
+                    </Tooltip>
+                  </Link>
+                </StyledTableCell>
+                <StyledTableCell align="center">{row.price}</StyledTableCell>
+                <StyledTableCell align="center">{row.dialer}</StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.receiveDate}
+                </StyledTableCell>
+
+                <StyledTableCell align="center">
+                  <BasicButton
+                    text="Перейти в режим разметки"
+                    variant="outlined"
+                    onClick={() =>
+                      navigate(`/compare/${row.id}`, { replace: true })
+                    }
+                  />
                 </StyledTableCell>
               </StyledTableRow>
             ))}
