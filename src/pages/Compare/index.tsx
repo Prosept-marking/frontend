@@ -1,3 +1,9 @@
+import EditModeForm from '../../components/EditModeForm';
+
 export default function Compare() {
-  return <></>;
+  return (
+    <>
+      <EditModeForm />
+    </>
+  );
 }
