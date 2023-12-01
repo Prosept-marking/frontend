@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { BasicButton } from '../BasicButton';
-import { Box, Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { DilerCard } from '../DilerCard';
 import { ProductCard } from '../ProductCard';
 
@@ -27,13 +27,10 @@ export default function EditModeForm() {
         borderColor="action.disabledBackground"
         borderRadius={1}
         padding={5}
+        columnGap={3}
       >
-        <Box
-          display={'flex'}
-          flexDirection={'column'}
-          gap={5}
-          justifyContent={'space-between'}
-        >
+        <Box display={'flex'} flexDirection={'column'} gap={5}>
+          <Typography variant="h4">Карточка дилера</Typography>
           <DilerCard />
           <BasicButton
             text="Следующий товар"
@@ -42,7 +39,17 @@ export default function EditModeForm() {
           />
           {/* <BasicButton text="Предыдущий товар" variant="outlined" type="button" /> */}
         </Box>
-        <Box display={'flex'} flexDirection={'column'} gap={1} maxWidth={'sm'}>
+        <Box
+          display={'flex'}
+          flexDirection={'column'}
+          gap={5}
+          maxWidth={'100%'}
+          flexGrow={1}
+          flexShrink={0}
+        >
+          <Typography variant="h4">
+            Список товаров, предложенных моделью
+          </Typography>
           <ProductCard />
           <ProductCard />
           <ProductCard />
