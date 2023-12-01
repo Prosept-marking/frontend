@@ -17,8 +17,8 @@ export default function DoneIcon() {
           gradientUnits="userSpaceOnUse"
           id="color-1_VFaz7MkjAiu0_gr1"
         >
-          <stop offset="0.108" stop-color="#0d7044"></stop>
-          <stop offset="0.433" stop-color="#11945a"></stop>
+          <stop offset="0.108" stopColor="#0d7044"></stop>
+          <stop offset="0.433" stopColor="#11945a"></stop>
         </linearGradient>
         <linearGradient
           x1="44.41029"
@@ -28,24 +28,24 @@ export default function DoneIcon() {
           gradientUnits="userSpaceOnUse"
           id="color-2_VFaz7MkjAiu0_gr2"
         >
-          <stop offset="0" stop-color="#2ac782"></stop>
-          <stop offset="1" stop-color="#21b876"></stop>
+          <stop offset="0" stopColor="#2ac782"></stop>
+          <stop offset="1" stopColor="#21b876"></stop>
         </linearGradient>
       </defs>
       <g
         fill="none"
-        fill-rule="nonzero"
+        fillRule="nonzero"
         stroke="none"
-        stroke-width="1"
-        stroke-linecap="butt"
-        stroke-linejoin="miter"
-        stroke-miterlimit="10"
-        stroke-dasharray=""
-        stroke-dashoffset="0"
-        font-family="none"
-        font-weight="none"
-        font-size="none"
-        text-anchor="none"
+        strokeWidth="1"
+        strokeLinecap="butt"
+        strokeLinejoin="miter"
+        strokeMiterlimit="10"
+        strokeDasharray=""
+        strokeDashoffset="0"
+        fontFamily="none"
+        fontWeight="none"
+        fontSize="none"
+        textAnchor="none"
       >
         <g transform="scale(5.33333,5.33333)">
           <path
