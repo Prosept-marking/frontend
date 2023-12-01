@@ -62,16 +62,8 @@ export default function EditModeForm() {
           </Typography>
           <ProductCard />
           <Box display={'flex'} flexDirection={'row'} columnGap={2}>
-            <BasicButton
-              text="Сохранить выбор"
-              variant="outlined"
-              type="button"
-            />
-            <BasicButton
-              text="Отклонить подборку"
-              variant="outlined"
-              type="button"
-            />
+            <BasicButton text="Сохранить выбор" />
+            <BasicButton text="Отклонить подборку" color="error" />
           </Box>
         </Box>
       </Stack>
