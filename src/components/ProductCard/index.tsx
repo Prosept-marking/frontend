@@ -18,7 +18,20 @@ export const ProductCard: FC<{
   category_id = 567.8,
 }) => {
   return (
-    <Paper>
+    <Paper
+      sx={{
+        '&: hover': {
+          boxShadow: '0 0 15px green',
+          transition: 'background-color .5s, transform 2s',
+          cursor: 'pointer',
+        },
+        '&: active': {
+          boxShadow: '0 0 15px red',
+          transition: 'background-color .5s, transform 2s',
+        },
+      }}
+      elevation={5}
+    >
       <CardContent>
         <Box display={'flex'} gap={1} flexDirection={'column'} maxWidth={'sm'}>
           <Box display={'flex'} flexDirection={'column'}>

@@ -1,6 +1,11 @@
-import Paper from '@mui/material/Paper';
 import { FC } from 'react';
-import { Button, CardActions, CardContent, Typography } from '@mui/material';
+import {
+  Button,
+  Paper,
+  CardActions,
+  CardContent,
+  Typography,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
 
 export const DilerCard: FC<{
@@ -19,7 +24,7 @@ export const DilerCard: FC<{
   dealer_id = '3933',
 }) => {
   return (
-    <Paper>
+    <Paper elevation={10}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Id: {id}

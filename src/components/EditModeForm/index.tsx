@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { BasicButton } from '../BasicButton';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Divider, Stack, Typography } from '@mui/material';
 import { DilerCard } from '../DilerCard';
 import { ProductCard } from '../ProductCard';
 
@@ -21,15 +21,22 @@ export default function EditModeForm() {
         display={'flex'}
         flexDirection={'row'}
         justifyContent={'space-around'}
-        alignItems={'center'}
+        alignItems="flex-start"
         marginTop={10}
         border={1}
         borderColor="action.disabledBackground"
         borderRadius={1}
         padding={5}
         columnGap={3}
+        position={'relative'}
       >
-        <Box display={'flex'} flexDirection={'column'} gap={5}>
+        <Box
+          display={'flex'}
+          flexDirection={'column'}
+          gap={5}
+          position={'sticky'}
+          top={100}
+        >
           <Typography variant="h4">Карточка дилера</Typography>
           <DilerCard />
           <BasicButton
@@ -39,6 +46,9 @@ export default function EditModeForm() {
           />
           {/* <BasicButton text="Предыдущий товар" variant="outlined" type="button" /> */}
         </Box>
+        <Divider orientation="vertical" flexItem>
+          Выберите совпадение
+        </Divider>
         <Box
           display={'flex'}
           flexDirection={'column'}
@@ -50,11 +60,6 @@ export default function EditModeForm() {
           <Typography variant="h4">
             Список товаров, предложенных моделью
           </Typography>
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
           <ProductCard />
           <Box display={'flex'} flexDirection={'row'} columnGap={2}>
             <BasicButton
