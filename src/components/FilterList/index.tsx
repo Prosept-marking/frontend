@@ -9,21 +9,27 @@ import {
 import { BasicButton } from '../BasicButton';
 import { useForm, Controller } from 'react-hook-form';
 import type { SubmitHandler, DefaultValues } from 'react-hook-form';
+import { useGetDealersQuery } from '../../utils/api';
 
 export type FormValues = {
-  diler: string;
+  dealer: string;
   date: string;
   status: string;
 };
 
-const data = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
+const filtersDate = [
+  { value: 'day', label: 'День' },
+  { value: 'week', label: 'Неделя' },
+  { value: 'month', label: 'Месяц' },
+];
+
+const filtersStatus = [
+  { value: 'true', label: 'Есть сопоставление' },
+  { value: 'false', label: 'Нет сопоставления' },
 ];
 
 export const defaultValues: DefaultValues<FormValues> = {
-  diler: '',
+  dealer: '',
   date: '',
   status: '',
 };
@@ -33,8 +39,11 @@ export default function FilterList() {
     defaultValues,
   });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) =>
+  const { data } = useGetDealersQuery();
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     alert(JSON.stringify(data));
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -57,16 +66,16 @@ export default function FilterList() {
           <Controller
             render={({ field }) => (
               <Select {...field} label="Дилер">
-                {data.map((item) => {
+                {data?.results.map((item: any) => {
                   return (
-                    <MenuItem key={item.value} value={item.value}>
-                      {item.label}
+                    <MenuItem key={item.dealer_id} value={item.dealer_id}>
+                      {item.name}
                     </MenuItem>
                   );
                 })}
               </Select>
             )}
-            name="diler"
+            name="dealer"
             control={control}
           />
         </FormControl>
@@ -75,9 +84,9 @@ export default function FilterList() {
           <Controller
             render={({ field }) => (
               <Select {...field} label="Статус">
-                {data.map((item) => {
+                {filtersStatus.map((item) => {
                   return (
-                    <MenuItem key={item.value} value={item.value}>
+                    <MenuItem key={item.label} value={item.value}>
                       {item.label}
                     </MenuItem>
                   );
@@ -93,7 +102,7 @@ export default function FilterList() {
           <Controller
             render={({ field }) => (
               <Select {...field} label="Дата">
-                {data.map((item) => {
+                {filtersDate.map((item) => {
                   return (
                     <MenuItem key={item.value} value={item.value}>
                       {item.label}

@@ -10,6 +10,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button, Tooltip } from '@mui/material';
 import DoneIcon from '../../assets/icons/DoneIcon';
 import { BasicButton } from '../BasicButton';
+import { useGetDealerProductsQuery } from '../../utils/api';
+import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
+import { DealerCardType } from '../../types/DealerCardType';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -37,71 +40,47 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  id: number,
-  name: string,
-  linkItem: string,
-  price: number,
-  dialer: string,
-  receiveDate: string,
-  status: boolean,
-  matchItem?: string,
-) {
-  return { id, name, linkItem, price, dialer, receiveDate, status, matchItem };
-}
+// function createData(
+//   id: number,
+//   name: string,
+//   linkItem: string,
+//   price: number,
+//   dialer: string,
+//   receiveDate: string,
+//   status: boolean,
+//   matchItem?: string,
+// ) {
+//   return { id, name, linkItem, price, dialer, receiveDate, status, matchItem };
+// }
 
-const rows = [
-  createData(
-    1,
-    'Frozen yoghurt',
-    'https://github.com/orgs/Prosept-marking/projects/3/views/4',
-    159,
-    'OZON',
-    '01.01.1980',
-    true,
-    'Frozen yoghurt',
-  ),
-  createData(
-    2,
-    'Ice cream sandwich',
-    'https://github.com/orgs/Prosept-marking/projects/3/views/4',
-    237,
-    'OZON',
-    '01.01.1980',
-    false,
-  ),
-  createData(
-    3,
-    'Eclair',
-    'https://github.com/orgs/Prosept-marking/projects/3/views/4',
-    262,
-    'OZON',
-    '01.01.1980',
-    false,
-  ),
-  createData(
-    4,
-    'Cupcake',
-    'https://github.com/orgs/Prosept-marking/projects/3/views/4',
-    305,
-    'OZON',
-    '01.01.1980',
-    false,
-  ),
-  createData(
-    5,
-    'Gingerbread',
-    'https://github.com/orgs/Prosept-marking/projects/3/views/4',
-    356,
-    'OZON',
-    '01.01.1980',
-    true,
-    'labuda',
-  ),
-];
+function findStatus(status: boolean) {
+  switch (status) {
+    case true:
+      return (
+        <Tooltip title="Cовпадение подтверждено">
+          <span>
+            <DoneIcon />
+          </span>
+        </Tooltip>
+      );
+
+    case false:
+      return (
+        <Tooltip title="Необходимо подтверждение">
+          <span>
+            <NeedsCompareIcon />
+          </span>
+        </Tooltip>
+      );
+  }
+}
 
 export default function Main() {
   const navigate = useNavigate();
+
+  const { data } = useGetDealerProductsQuery({ start: 1, size: 10 });
+
+  console.log(data);
   return (
     <>
       <TableContainer component={Paper}>
@@ -126,44 +105,34 @@ export default function Main() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.name}>
+            {data?.results?.map((item: DealerCardType) => (
+              <StyledTableRow key={item.pk}>
                 <StyledTableCell component="th" scope="row">
-                  {row.name}
+                  {item.product_name}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {row.status ? (
-                    <Tooltip title="Cовпадение подтверждено">
-                      <span>
-                        <DoneIcon />
-                      </span>
-                    </Tooltip>
-                  ) : (
-                    ''
-                  )}
+                  {findStatus(item?.matched)}
                 </StyledTableCell>
+                <StyledTableCell align="center">{item.matched}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {row.matchItem}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <Link to={row.linkItem}>
-                    <Tooltip title={row.linkItem}>
+                  <Link to={item.product_url}>
+                    <Tooltip title={item.product_url}>
                       <Button>url</Button>
                     </Tooltip>
                   </Link>
                 </StyledTableCell>
-                <StyledTableCell align="center">{row.price}</StyledTableCell>
-                <StyledTableCell align="center">{row.dialer}</StyledTableCell>
+                <StyledTableCell align="center">{item.price}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {row.receiveDate}
+                  {item.dealer_id}
                 </StyledTableCell>
+                <StyledTableCell align="center">{item.date}</StyledTableCell>
 
                 <StyledTableCell align="center">
                   <BasicButton
                     text="Перейти в режим разметки"
                     variant="outlined"
                     onClick={() =>
-                      navigate(`/compare/${row.id}`, { replace: true })
+                      navigate(`/compare/${item.pk}`, { replace: true })
                     }
                   />
                 </StyledTableCell>

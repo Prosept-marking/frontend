@@ -20,6 +20,7 @@ export const ProductCard: FC<{
   return (
     <Paper
       sx={{
+        maxWidth: 450,
         '&: hover': {
           boxShadow: '0 0 15px green',
           transition: 'background-color .5s, transform 2s',
