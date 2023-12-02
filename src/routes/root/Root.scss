@@ -2,3 +2,9 @@
   height: 100%;
   margin: 20px 100px;
 }
+
+@media (max-width: 900px) {
+  .root {
+    margin: 20px;
+  }
+}

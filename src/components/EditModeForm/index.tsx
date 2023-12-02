@@ -1,11 +1,16 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BasicButton } from '../BasicButton';
 import { Box, Divider, Stack, Typography } from '@mui/material';
-import { DilerCard } from '../DilerCard';
+import { DealerCard } from '../DealerCard';
 import { ProductCard } from '../ProductCard';
+import { useGetDealerProductIdQuery } from '../../utils/api';
 
 export default function EditModeForm() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const pathId = parseInt(location.pathname.match(/\d+/)?.[0] || '0', 10);
+
+  const { data, isLoading } = useGetDealerProductIdQuery({ id: pathId });
 
   return (
     <>
@@ -30,37 +35,60 @@ export default function EditModeForm() {
         columnGap={3}
         position={'relative'}
       >
-        <Box
-          display={'flex'}
-          flexDirection={'column'}
-          gap={5}
-          position={'sticky'}
-          top={100}
-        >
-          <Typography variant="h4">Карточка дилера</Typography>
-          <DilerCard />
-          <BasicButton
-            text="Следующий товар"
-            variant="outlined"
-            type="button"
-          />
-          {/* <BasicButton text="Предыдущий товар" variant="outlined" type="button" /> */}
-        </Box>
+        {' '}
+        {!data ? (
+          <>
+            {' '}
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Данные не загружены
+            </Typography>{' '}
+          </>
+        ) : (
+          <Box
+            display={'flex'}
+            flexDirection={'column'}
+            gap={5}
+            position={'sticky'}
+            top={100}
+            flexShrink={0}
+          >
+            <Typography variant="h4">Карточка дилера</Typography>
+            <DealerCard data={data} isLoading={isLoading} />
+            <BasicButton
+              text="Следующий товар"
+              variant="outlined"
+              type="button"
+            />
+            {/* <BasicButton text="Предыдущий товар" variant="outlined" type="button" /> */}
+          </Box>
+        )}
         <Divider orientation="vertical" flexItem>
-          Выберите совпадение
+          Выберите <br />
+          совпадение
         </Divider>
-        <Box
-          display={'flex'}
-          flexDirection={'column'}
-          gap={5}
-          maxWidth={'100%'}
-          flexGrow={1}
-          flexShrink={0}
-        >
+        <Box display={'flex'} flexDirection={'column'} gap={5}>
           <Typography variant="h4">
             Список товаров, предложенных моделью
           </Typography>
-          <ProductCard />
+          <Box
+            display={'flex'}
+            flexDirection={'row'}
+            flexWrap={'wrap'}
+            gap={5}
+            maxWidth={'100%'}
+            flexShrink={1}
+          >
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+          </Box>
           <Box display={'flex'} flexDirection={'row'} columnGap={2}>
             <BasicButton text="Сохранить выбор" />
             <BasicButton text="Отклонить подборку" color="error" />
