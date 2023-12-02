@@ -35,37 +35,24 @@ export default function EditModeForm() {
         columnGap={3}
         position={'relative'}
       >
-        {' '}
-        {!data ? (
-          <>
-            {' '}
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Данные не загружены
-            </Typography>{' '}
-          </>
-        ) : (
-          <Box
-            display={'flex'}
-            flexDirection={'column'}
-            gap={5}
-            position={'sticky'}
-            top={100}
-            flexShrink={0}
-          >
-            <Typography variant="h4">Карточка дилера</Typography>
-            <DealerCard data={data} isLoading={isLoading} />
-            <BasicButton
-              text="Следующий товар"
-              variant="outlined"
-              type="button"
-            />
-            {/* <BasicButton text="Предыдущий товар" variant="outlined" type="button" /> */}
-          </Box>
-        )}
+        <Box
+          display={'flex'}
+          flexDirection={'column'}
+          gap={5}
+          position={'sticky'}
+          top={100}
+          flexShrink={0}
+        >
+          <Typography variant="h4">Карточка дилера</Typography>
+          <DealerCard data={data} isLoading={isLoading} />
+          <BasicButton
+            text="Следующий товар"
+            variant="outlined"
+            type="button"
+          />
+          {/* <BasicButton text="Предыдущий товар" variant="outlined" type="button" /> */}
+        </Box>
+
         <Divider orientation="vertical" flexItem>
           Выберите <br />
           совпадение
@@ -82,7 +69,6 @@ export default function EditModeForm() {
             maxWidth={'100%'}
             flexShrink={1}
           >
-            <ProductCard />
             <ProductCard />
             <ProductCard />
             <ProductCard />

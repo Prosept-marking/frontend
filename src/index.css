@@ -1,4 +1,6 @@
 @import url('./assets/fonts/fonts.css');
+@import url('./assets/styles/common.css');
+@import url('./assets/styles/normalize.css');
 
 * {
   box-sizing: border-box;

@@ -40,7 +40,6 @@ export default function FilterList() {
   });
 
   const { data } = useGetDealersQuery();
-  sessionStorage.setItem('дилеры', JSON.stringify(data?.results));
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     alert(JSON.stringify(data));

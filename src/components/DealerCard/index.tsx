@@ -18,6 +18,10 @@ export const DealerCard = ({
 }) => {
   return isLoading ? (
     <Preloader />
+  ) : !data ? (
+    <Typography variant="h5" component="div">
+      Данные не загружены
+    </Typography>
   ) : (
     <Paper elevation={10} sx={{ maxWidth: 450 }}>
       <CardContent>
