@@ -9,6 +9,7 @@ import {
 import { BasicButton } from '../BasicButton';
 import { useForm, Controller } from 'react-hook-form';
 import type { SubmitHandler, DefaultValues } from 'react-hook-form';
+import { useGetDilersQuery } from '../../utils/api';
 
 export type FormValues = {
   diler: string;
@@ -16,7 +17,7 @@ export type FormValues = {
   status: string;
 };
 
-const data = [
+const filters = [
   { value: 'chocolate', label: 'Chocolate' },
   { value: 'strawberry', label: 'Strawberry' },
   { value: 'vanilla', label: 'Vanilla' },
@@ -33,8 +34,12 @@ export default function FilterList() {
     defaultValues,
   });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) =>
+  const { data } = useGetDilersQuery();
+  console.log(data);
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     alert(JSON.stringify(data));
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -57,10 +62,11 @@ export default function FilterList() {
           <Controller
             render={({ field }) => (
               <Select {...field} label="Дилер">
-                {data.map((item) => {
+                {data?.results.map((item: any) => {
+                  console.log(item);
                   return (
-                    <MenuItem key={item.value} value={item.value}>
-                      {item.label}
+                    <MenuItem key={item.dealer_id} value={item.dealer_id}>
+                      {item.name}
                     </MenuItem>
                   );
                 })}
@@ -75,7 +81,7 @@ export default function FilterList() {
           <Controller
             render={({ field }) => (
               <Select {...field} label="Статус">
-                {data.map((item) => {
+                {filters.map((item) => {
                   return (
                     <MenuItem key={item.value} value={item.value}>
                       {item.label}
@@ -93,7 +99,7 @@ export default function FilterList() {
           <Controller
             render={({ field }) => (
               <Select {...field} label="Дата">
-                {data.map((item) => {
+                {filters.map((item) => {
                   return (
                     <MenuItem key={item.value} value={item.value}>
                       {item.label}
