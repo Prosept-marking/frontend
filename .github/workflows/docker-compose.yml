@@ -1,0 +1,36 @@
+version: '3'
+
+volumes:
+  pg_data:
+  static_volume:
+
+services:
+  db:
+    image: postgres:13.10
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  backend:
+    image: vladislavkuznets0v/prosept_backend:latest
+    env_file: .env
+    volumes:
+      - static_volume:/backend_static
+    depends_on:
+      - db
+  frontend:
+    image: asbest/prosept-front:latest
+    env_file: ./backend/.env
+    command: cp -r /app/build/. /frontend_static/
+    volumes:
+      - static_volume:/frontend_static
+  gateway:
+    image: vladislavkuznets0v/prosept_nginx
+    env_file: .env
+    volumes:
+      - static_volume:/staticfiles/
+    ports:
+      - 8000:80
+    depends_on:
+      - db
+      - backend
+      - frontend
