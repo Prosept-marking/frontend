@@ -7,12 +7,12 @@ volumes:
 services:
   db:
     image: postgres:13.10
-    env_file: .env
+    env_file: ./backend/.env
     volumes:
       - pg_data:/var/lib/postgresql/data
   backend:
     image: vladislavkuznets0v/prosept_backend:latest
-    env_file: .env
+    env_file: ./backend/.env
     volumes:
       - static_volume:/backend_static
     depends_on:
@@ -25,7 +25,7 @@ services:
       - static_volume:/frontend_static
   gateway:
     image: vladislavkuznets0v/prosept_nginx
-    env_file: .env
+    env_file: ./backend/.env
     volumes:
       - static_volume:/staticfiles/
     ports:
