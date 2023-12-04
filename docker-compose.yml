@@ -27,9 +27,11 @@ services:
     image: vladislavkuznets0v/prosept_nginx
     env_file: .env
     volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
       - static_volume:/staticfiles/
     ports:
-      - 8000:80
+      - 80:80
+      - 443:443
     depends_on:
       - db
       - backend
