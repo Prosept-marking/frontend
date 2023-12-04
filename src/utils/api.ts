@@ -1,8 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { ProductRelationItem } from '../models/ProductRelationItem';
 
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://213.171.4.71:8000/api/v1/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://prosept.hopto.org/api/v1/' }),
+
   endpoints: (build) => ({
     getDealers: build.query<any, void>({
       query: () => 'dealer-names/',
@@ -27,6 +29,28 @@ export const api = createApi({
       }),
       transformResponse: (response: any) => response.results,
     }),
+    getProductRelationId: build.query<any, { id: number }>({
+      query: ({ id }) => `/product-relation/${id}/`,
+    }),
+    createProductRelation: build.mutation<
+      ProductRelationItem,
+      ProductRelationItem
+    >({
+      query: (relationItem) => ({
+        url: `/product-relation/`,
+        method: 'POST',
+        body: [relationItem],
+      }),
+    }),
+    deleteProductRelationId: build.mutation<
+      ProductRelationItem,
+      ProductRelationItem
+    >({
+      query: (relationItem) => ({
+        url: `/product-relation/${relationItem.id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
@@ -35,4 +59,7 @@ export const {
   useGetDealerProductsQuery,
   useGetDealerProductIdQuery,
   useLazyFilterDealerProductsQuery,
+  useGetProductRelationIdQuery,
+  useCreateProductRelationMutation,
+  useDeleteProductRelationIdMutation,
 } = api;

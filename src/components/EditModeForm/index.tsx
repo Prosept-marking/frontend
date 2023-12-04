@@ -1,16 +1,37 @@
+import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BasicButton } from '../BasicButton';
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import { DealerCard } from '../DealerCard';
 import { ProductCard } from '../ProductCard';
-import { useGetDealerProductIdQuery } from '../../utils/api';
+import {
+  useGetDealerProductIdQuery,
+  useGetProductRelationIdQuery,
+} from '../../utils/api';
+import { PopupWithConfirm } from '../PopupWithConfirm';
+import { useDeleteProductRelationIdMutation } from '../../utils/api';
+import { ProductRelationItem } from '../../models/ProductRelationItem';
 
 export default function EditModeForm() {
   const navigate = useNavigate();
   const location = useLocation();
   const pathId = parseInt(location.pathname.match(/\d+/)?.[0] || '0', 10);
+  const [isRenderComponent, setIsRenderComponent] = React.useState(false);
+  const relationItem: ProductRelationItem = { id: pathId };
 
   const { data, isLoading } = useGetDealerProductIdQuery({ id: pathId });
+
+  const relationData = useGetProductRelationIdQuery({ id: pathId });
+
+  const [deleteProductRelationId, {}] = useDeleteProductRelationIdMutation();
+
+  const handleRemove = (relationItem: ProductRelationItem) => {
+    deleteProductRelationId(relationItem);
+  };
+
+  const renderComponent = () => {
+    setIsRenderComponent(true);
+  };
 
   return (
     <>
@@ -75,10 +96,27 @@ export default function EditModeForm() {
             <ProductCard />
             <ProductCard />
           </Box>
-          <Box display={'flex'} flexDirection={'row'} columnGap={2}>
-            <BasicButton text="Сохранить выбор" />
-            <BasicButton text="Отклонить подборку" color="error" />
-          </Box>
+          {relationData.data ? (
+            <>
+              <BasicButton
+                text="Отменить сопоставление"
+                color="info"
+                onClick={renderComponent}
+              />
+              {isRenderComponent && (
+                <PopupWithConfirm
+                  remove={handleRemove}
+                  relationItem={relationItem}
+                  isOpenPopup={true}
+                />
+              )}
+            </>
+          ) : (
+            <Box display={'flex'} flexDirection={'row'} columnGap={2}>
+              <BasicButton text="Сохранить выбор" />
+              <BasicButton text="Отклонить подборку" color="error" />
+            </Box>
+          )}
         </Box>
       </Stack>
     </>
