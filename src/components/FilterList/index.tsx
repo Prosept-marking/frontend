@@ -9,13 +9,11 @@ import {
 import { BasicButton } from '../BasicButton';
 import { useForm, Controller } from 'react-hook-form';
 import type { SubmitHandler, DefaultValues } from 'react-hook-form';
-import { useGetDealersQuery } from '../../utils/api';
-
-export type FormValues = {
-  dealer_id: string;
-  date: string;
-  matched: string;
-};
+import { useGetDealersQuery } from '../../store/prosept/prosept.api';
+import { useActions } from '../../hooks/actions';
+import { useEffect, useState } from 'react';
+import { FILTERS_KEY } from '../../utils/constants';
+import { FormValues } from '../../models/models';
 
 const filtersDate = [
   { value: '', label: 'Снять выбор' },
@@ -48,9 +46,17 @@ export default function FilterList({
   });
 
   const { data: dealersFilters } = useGetDealersQuery();
+  const { setFilters, clearFilters } = useActions();
 
   const onSubmit: SubmitHandler<FormValues> = (filterData) => {
     handleFiltersClick(filterData);
+    setFilters(filterData);
+  };
+
+  const resetFilters = () => {
+    reset(defaultValues);
+    handleFiltersReset();
+    clearFilters();
   };
 
   return (
@@ -129,10 +135,7 @@ export default function FilterList({
         <BasicButton
           text="Сбросить"
           type="reset"
-          onClick={() => {
-            reset(defaultValues);
-            handleFiltersReset();
-          }}
+          onClick={() => resetFilters()}
         />
       </Stack>
     </form>

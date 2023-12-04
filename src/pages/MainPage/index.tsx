@@ -4,7 +4,8 @@ import MainTable from '../../components/MainTable';
 import {
   useGetDealerProductsQuery,
   useLazyFilterDealerProductsQuery,
-} from '../../utils/api';
+} from '../../store/prosept/prosept.api';
+import { FILTERS_KEY } from '../../utils/constants';
 
 export default function MainPage() {
   const { data: dealerProducts, isLoading: isLoadingInitial } =
@@ -30,6 +31,14 @@ export default function MainPage() {
       setDealerProductsArray(filteredDealerProducts);
     }
   }, [filteredDealerProducts]);
+
+  useEffect(() => {
+    const filtersString = localStorage.getItem(FILTERS_KEY);
+    if (filtersString !== null) {
+      const filters = JSON.parse(filtersString);
+      triggerFiltersQuery(filters);
+    }
+  }, [localStorage.getItem(FILTERS_KEY)]);
 
   const handleFiltersClick = (filters: any) => {
     triggerFiltersQuery(filters);

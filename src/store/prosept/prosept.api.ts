@@ -1,10 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ProductRelationItem } from '../models/ProductRelationItem';
+import { ProductRelationItem } from '../../models/models';
 
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://prosept.hopto.org/api/v1/' }),
-
   endpoints: (build) => ({
     getDealers: build.query<any, void>({
       query: () => 'dealer-names/',

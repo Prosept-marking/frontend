@@ -4,13 +4,14 @@ import { BasicButton } from '../BasicButton';
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import { DealerCard } from '../DealerCard';
 import { ProductCard } from '../ProductCard';
+
+import { PopupWithConfirm } from '../PopupWithConfirm';
+import { ProductRelationItem } from '../../models/models';
 import {
+  useDeleteProductRelationIdMutation,
   useGetDealerProductIdQuery,
   useGetProductRelationIdQuery,
-} from '../../utils/api';
-import { PopupWithConfirm } from '../PopupWithConfirm';
-import { useDeleteProductRelationIdMutation } from '../../utils/api';
-import { ProductRelationItem } from '../../models/ProductRelationItem';
+} from '../../store/prosept/prosept.api';
 
 export default function EditModeForm() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function EditModeForm() {
 
   const relationData = useGetProductRelationIdQuery({ id: pathId });
 
-  const [deleteProductRelationId, {}] = useDeleteProductRelationIdMutation();
+  const [deleteProductRelationId] = useDeleteProductRelationIdMutation();
 
   const handleRemove = (relationItem: ProductRelationItem) => {
     deleteProductRelationId(relationItem);

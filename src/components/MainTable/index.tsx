@@ -12,7 +12,7 @@ import DoneIcon from '../../assets/icons/DoneIcon';
 import { BasicButton } from '../BasicButton';
 
 import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
-import { DealerCardType } from '../../types/DealerCardType';
+import { DealerCardType } from '../../models/models';
 import Preloader from '../Preloader';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -78,9 +78,9 @@ export default function MainTable({
     <>
       {isLoadingInitial || isLoadingFiltered ? (
         <Preloader />
-      ) : data.length === 0 ? (
+      ) : data?.length === 0 ? (
         <Paper
-          sx={{ p: 2, textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}
+          sx={{ p: 5, textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}
         >
           Ничего не нашлось
         </Paper>
@@ -129,7 +129,7 @@ export default function MainTable({
                   </StyledTableCell>
                   <StyledTableCell align="center">{item.price}</StyledTableCell>
                   <StyledTableCell align="center">
-                    {item.dealer_id}
+                    {item.dealer_name}
                   </StyledTableCell>
                   <StyledTableCell align="center">{item.date}</StyledTableCell>
 

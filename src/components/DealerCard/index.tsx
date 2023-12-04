@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Preloader from '../Preloader';
-import { DealerCardType } from '../../types/DealerCardType';
+import { DealerCardType } from '../../models/models';
 
 export const DealerCard = ({
   data,
