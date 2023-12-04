@@ -10,7 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button, Tooltip } from '@mui/material';
 import DoneIcon from '../../assets/icons/DoneIcon';
 import { BasicButton } from '../BasicButton';
-import { useGetDealerProductsQuery } from '../../utils/api';
+
 import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
 import { DealerCardType } from '../../types/DealerCardType';
 
@@ -40,19 +40,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-// function createData(
-//   id: number,
-//   name: string,
-//   linkItem: string,
-//   price: number,
-//   dialer: string,
-//   receiveDate: string,
-//   status: boolean,
-//   matchItem?: string,
-// ) {
-//   return { id, name, linkItem, price, dialer, receiveDate, status, matchItem };
-// }
-
 function findStatus(status: boolean) {
   switch (status) {
     case true:
@@ -75,12 +62,9 @@ function findStatus(status: boolean) {
   }
 }
 
-export default function Main() {
+export default function MainTable({ data }: { data: DealerCardType[] }) {
   const navigate = useNavigate();
 
-  const { data } = useGetDealerProductsQuery({ start: 1, size: 10 });
-
-  console.log(data);
   return (
     <>
       <TableContainer component={Paper}>
@@ -105,7 +89,7 @@ export default function Main() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.results?.map((item: DealerCardType) => (
+            {data?.map((item: DealerCardType) => (
               <StyledTableRow key={item.pk}>
                 <StyledTableCell component="th" scope="row">
                   {item.product_name}

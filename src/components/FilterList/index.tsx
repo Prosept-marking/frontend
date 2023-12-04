@@ -9,12 +9,14 @@ import {
 import { BasicButton } from '../BasicButton';
 import { useForm, Controller } from 'react-hook-form';
 import type { SubmitHandler, DefaultValues } from 'react-hook-form';
-import { useGetDealersQuery } from '../../utils/api';
+import {
+  useGetDealersQuery,
+} from '../../utils/api';
 
 export type FormValues = {
-  dealer: string;
+  dealer_id: string;
   date: string;
-  status: string;
+  matched: string;
 };
 
 const filtersDate = [
@@ -29,20 +31,24 @@ const filtersStatus = [
 ];
 
 export const defaultValues: DefaultValues<FormValues> = {
-  dealer: '',
+  dealer_id: '',
   date: '',
-  status: '',
+  matched: '',
 };
 
-export default function FilterList() {
+export default function FilterList({
+  handleFiltersClick,
+}: {
+  handleFiltersClick: (data: FormValues) => void;
+}) {
   const { handleSubmit, reset, control } = useForm<FormValues>({
     defaultValues,
   });
 
-  const { data } = useGetDealersQuery();
+  const { data: dealersFilters } = useGetDealersQuery();
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    alert(JSON.stringify(data));
+  const onSubmit: SubmitHandler<FormValues> = (filterData) => {
+    handleFiltersClick(filterData);
   };
 
   return (
@@ -66,16 +72,16 @@ export default function FilterList() {
           <Controller
             render={({ field }) => (
               <Select {...field} label="Дилер">
-                {data?.results.map((item: any) => {
+                {dealersFilters?.results.map((item: any) => {
                   return (
-                    <MenuItem key={item.dealer_id} value={item.dealer_id}>
+                    <MenuItem key={item.pk} value={item.pk}>
                       {item.name}
                     </MenuItem>
                   );
                 })}
               </Select>
             )}
-            name="dealer"
+            name="dealer_id"
             control={control}
           />
         </FormControl>
@@ -93,7 +99,7 @@ export default function FilterList() {
                 })}
               </Select>
             )}
-            name="status"
+            name="matched"
             control={control}
           />
         </FormControl>

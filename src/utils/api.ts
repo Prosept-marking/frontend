@@ -10,9 +10,22 @@ export const api = createApi({
     getDealerProducts: build.query<any, { start: number; size: number }>({
       query: ({ start = 1, size = 20 }) =>
         `dealer-products/?limit=${start}&page_size=${size}`,
+      transformResponse: (response: any) => response.results,
     }),
     getDealerProductId: build.query<any, { id: number }>({
       query: ({ id }) => `/dealer-products/${id}/`,
+    }),
+    filterDealerProducts: build.query<any, any>({
+      query: ({ dealer_id, matched, date, page_size = 20 }) => ({
+        url: `dealer-products/`,
+        params: {
+          dealer_id,
+          matched,
+          date,
+          page_size,
+        },
+      }),
+      transformResponse: (response: any) => response.results,
     }),
   }),
 });
@@ -21,4 +34,5 @@ export const {
   useGetDealersQuery,
   useGetDealerProductsQuery,
   useGetDealerProductIdQuery,
+  useLazyFilterDealerProductsQuery,
 } = api;
