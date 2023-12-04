@@ -1,19 +1,27 @@
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button, Tooltip } from '@mui/material';
-import DoneIcon from '../../assets/icons/DoneIcon';
+import {
+  Button,
+  Pagination,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  tableCellClasses,
+} from '@mui/material';
 import { BasicButton } from '../BasicButton';
-
-import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
-import { DealerCardType } from '../../models/models';
 import Preloader from '../Preloader';
+import DoneIcon from '../../assets/icons/DoneIcon';
+import DeniedCompareIcon from '../../assets/icons/DeniedCompareIcon';
+import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
+
+import { DealerCardType } from '../../models/models';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,8 +49,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function findStatus(status: boolean) {
-  switch (status) {
+function findStatus(matched: boolean, postponed: boolean) {
+  switch (matched) {
     case true:
       return (
         <Tooltip title="Cовпадение подтверждено">
@@ -53,7 +61,13 @@ function findStatus(status: boolean) {
       );
 
     case false:
-      return (
+      return postponed ? (
+        <Tooltip title="Сравнение отклонено">
+          <span>
+            <DeniedCompareIcon />
+          </span>
+        </Tooltip>
+      ) : (
         <Tooltip title="Необходимо подтверждение">
           <span>
             <NeedsCompareIcon />
@@ -73,6 +87,10 @@ export default function MainTable({
   isLoadingFiltered: boolean;
 }) {
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
 
   return (
     <>
@@ -85,68 +103,77 @@ export default function MainTable({
           Ничего не нашлось
         </Paper>
       ) : (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Наименование товара</StyledTableCell>
-                <StyledTableCell align="center">Статус</StyledTableCell>
-                <StyledTableCell align="center">
-                  Сопоставленный товар
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  Ссылка на товар
-                </StyledTableCell>
-                <StyledTableCell align="center">Цена</StyledTableCell>
-                <StyledTableCell align="center">Дилер</StyledTableCell>
-                <StyledTableCell align="center">
-                  Дата получения записи
-                </StyledTableCell>
-
-                <StyledTableCell align="center">
-                  Режим редактирования
-                </StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data?.map((item: DealerCardType) => (
-                <StyledTableRow key={item.pk}>
-                  <StyledTableCell component="th" scope="row">
-                    {item.product_name}
+        <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Наименование товара</StyledTableCell>
+                  <StyledTableCell align="center">Статус</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Сопоставленный товар
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {findStatus(item?.matched)}
+                    Ссылка на товар
                   </StyledTableCell>
+                  <StyledTableCell align="center">Цена</StyledTableCell>
+                  <StyledTableCell align="center">Дилер</StyledTableCell>
                   <StyledTableCell align="center">
-                    {item.matched}
+                    Дата получения записи
                   </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <Link to={item.product_url}>
-                      <Tooltip title={item.product_url}>
-                        <Button>url</Button>
-                      </Tooltip>
-                    </Link>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{item.price}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    {item.dealer_name}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{item.date}</StyledTableCell>
 
                   <StyledTableCell align="center">
-                    <BasicButton
-                      text="Перейти в режим разметки"
-                      variant="outlined"
-                      onClick={() =>
-                        navigate(`/compare/${item.pk}`, { replace: true })
-                      }
-                    />
+                    Режим редактирования
                   </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data?.map((item: DealerCardType) => (
+                  <StyledTableRow key={item.pk}>
+                    <StyledTableCell component="th" scope="row">
+                      {item.product_name}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {findStatus(item?.matched, item?.postponed)}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.matched}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <Link to={item.product_url}>
+                        <Tooltip title={item.product_url}>
+                          <Button>url</Button>
+                        </Tooltip>
+                      </Link>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.price}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.dealer_name}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {item.real_date}
+                    </StyledTableCell>
+
+                    <StyledTableCell align="center">
+                      <BasicButton
+                        text="Перейти в режим разметки"
+                        variant="outlined"
+                        onClick={() =>
+                          navigate(`/compare/${item.pk}`, { replace: true })
+                        }
+                      />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Stack spacing={2} marginTop={5}>
+            <Pagination count={10} page={page} onChange={handleChange} />
+          </Stack>
+        </Stack>
       )}
     </>
   );

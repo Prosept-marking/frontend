@@ -8,22 +8,24 @@ export const api = createApi({
     getDealers: build.query<any, void>({
       query: () => 'dealer-names/',
     }),
-    getDealerProducts: build.query<any, { start: number; size: number }>({
-      query: ({ start = 1, size = 20 }) =>
-        `dealer-products/?limit=${start}&page_size=${size}`,
+    getDealerProducts: build.query<any, { start: number; page_size: number }>({
+      query: ({ start = 1, page_size = 20 }) =>
+        `dealer-products/?limit=${start}&page_size=${page_size}`,
       transformResponse: (response: any) => response.results,
     }),
+
     getDealerProductId: build.query<any, { id: number }>({
       query: ({ id }) => `/dealer-products/${id}/`,
     }),
     filterDealerProducts: build.query<any, any>({
-      query: ({ dealer_id, matched, date, page_size = 20 }) => ({
+      query: ({ dealer_id, matched, day, postponed, page_size = 20 }) => ({
         url: `dealer-products/`,
         params: {
           dealer_id,
           matched,
-          date,
+          day,
           page_size,
+          postponed,
         },
       }),
       transformResponse: (response: any) => response.results,

@@ -17,9 +17,9 @@ import { FormValues } from '../../models/models';
 
 const filtersDate = [
   { value: '', label: 'Снять выбор' },
-  { value: 'day', label: 'День' },
-  { value: 'week', label: 'Неделя' },
-  { value: 'month', label: 'Месяц' },
+  { value: '1', label: 'День' },
+  { value: '7', label: 'Неделя' },
+  { value: '30', label: 'Месяц' },
 ];
 
 const filtersStatus = [
@@ -28,10 +28,16 @@ const filtersStatus = [
   { value: 'false', label: 'Нет сопоставления' },
 ];
 
-export const defaultValues: DefaultValues<FormValues> = {
+const filtersPostponed = [
+  { value: '', label: 'Снять выбор' },
+  { value: 'true', label: 'Сравнение отклонено' },
+];
+
+let defaultValues: DefaultValues<FormValues> = {
   dealer_id: '',
-  date: '',
+  day: '',
   matched: '',
+  postponed: '',
 };
 
 export default function FilterList({
@@ -44,6 +50,25 @@ export default function FilterList({
   const { handleSubmit, reset, control } = useForm<FormValues>({
     defaultValues,
   });
+
+  const storedFilters = localStorage.getItem(FILTERS_KEY);
+
+  function setUpFilters() {
+    if (storedFilters) {
+      const filters = JSON.parse(storedFilters || '');
+
+      defaultValues = {
+        dealer_id: filters.dealer_id,
+        day: filters.day,
+        matched: filters.matched,
+        postponed: filters.postponed,
+      };
+    }
+  }
+
+  useEffect(() => {
+    setUpFilters();
+  }, []);
 
   const { data: dealersFilters } = useGetDealersQuery();
   const { setFilters, clearFilters } = useActions();
@@ -113,6 +138,24 @@ export default function FilterList({
           />
         </FormControl>
         <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel>Отклонено</InputLabel>
+          <Controller
+            render={({ field }) => (
+              <Select {...field} label="Отклонено">
+                {filtersPostponed.map((item) => {
+                  return (
+                    <MenuItem key={item.label} value={item.value}>
+                      {item.label}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            )}
+            name="postponed"
+            control={control}
+          />
+        </FormControl>
+        <FormControl sx={{ minWidth: 120 }}>
           <InputLabel>Дата</InputLabel>
           <Controller
             render={({ field }) => (
@@ -126,7 +169,7 @@ export default function FilterList({
                 })}
               </Select>
             )}
-            name="date"
+            name="day"
             control={control}
           />
         </FormControl>

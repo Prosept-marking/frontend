@@ -11,7 +11,7 @@ export default function MainPage() {
   const { data: dealerProducts, isLoading: isLoadingInitial } =
     useGetDealerProductsQuery({
       start: 1,
-      size: 10,
+      page_size: 10,
     });
 
   const [dealerProductsArray, setDealerProductsArray] = useState([]);
