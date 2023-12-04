@@ -7,14 +7,17 @@ import {
 } from '../../utils/api';
 
 export default function MainPage() {
-  const { data: dealerProducts } = useGetDealerProductsQuery({
-    start: 1,
-    size: 10,
-  });
+  const { data: dealerProducts, isLoading: isLoadingInitial } =
+    useGetDealerProductsQuery({
+      start: 1,
+      size: 10,
+    });
 
   const [dealerProductsArray, setDealerProductsArray] = useState([]);
-  const [triggerFiltersQuery, { data: filteredDealerProducts }] =
-    useLazyFilterDealerProductsQuery();
+  const [
+    triggerFiltersQuery,
+    { data: filteredDealerProducts, isLoading: isLoadingFiltered },
+  ] = useLazyFilterDealerProductsQuery();
 
   useEffect(() => {
     if (dealerProducts) {
@@ -32,10 +35,21 @@ export default function MainPage() {
     triggerFiltersQuery(filters);
   };
 
+  const handleFiltersReset = () => {
+    setDealerProductsArray(dealerProducts);
+  };
+
   return (
     <main className="main">
-      <FilterList handleFiltersClick={handleFiltersClick} />
-      <MainTable data={dealerProductsArray} />
+      <FilterList
+        handleFiltersClick={handleFiltersClick}
+        handleFiltersReset={handleFiltersReset}
+      />
+      <MainTable
+        data={dealerProductsArray}
+        isLoadingInitial={isLoadingInitial}
+        isLoadingFiltered={isLoadingFiltered}
+      />
     </main>
   );
 }

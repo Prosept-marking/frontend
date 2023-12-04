@@ -13,6 +13,7 @@ import { BasicButton } from '../BasicButton';
 
 import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
 import { DealerCardType } from '../../types/DealerCardType';
+import Preloader from '../Preloader';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -62,69 +63,91 @@ function findStatus(status: boolean) {
   }
 }
 
-export default function MainTable({ data }: { data: DealerCardType[] }) {
+export default function MainTable({
+  data,
+  isLoadingInitial,
+  isLoadingFiltered,
+}: {
+  data: DealerCardType[];
+  isLoadingInitial: boolean;
+  isLoadingFiltered: boolean;
+}) {
   const navigate = useNavigate();
 
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Наименование товара</StyledTableCell>
-              <StyledTableCell align="center">Статус</StyledTableCell>
-              <StyledTableCell align="center">
-                Сопоставленный товар
-              </StyledTableCell>
-              <StyledTableCell align="center">Ссылка на товар</StyledTableCell>
-              <StyledTableCell align="center">Цена</StyledTableCell>
-              <StyledTableCell align="center">Дилер</StyledTableCell>
-              <StyledTableCell align="center">
-                Дата получения записи
-              </StyledTableCell>
-
-              <StyledTableCell align="center">
-                Режим редактирования
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data?.map((item: DealerCardType) => (
-              <StyledTableRow key={item.pk}>
-                <StyledTableCell component="th" scope="row">
-                  {item.product_name}
+      {isLoadingInitial || isLoadingFiltered ? (
+        <Preloader />
+      ) : data.length === 0 ? (
+        <Paper
+          sx={{ p: 2, textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}
+        >
+          Ничего не нашлось
+        </Paper>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Наименование товара</StyledTableCell>
+                <StyledTableCell align="center">Статус</StyledTableCell>
+                <StyledTableCell align="center">
+                  Сопоставленный товар
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {findStatus(item?.matched)}
+                  Ссылка на товар
                 </StyledTableCell>
-                <StyledTableCell align="center">{item.matched}</StyledTableCell>
+                <StyledTableCell align="center">Цена</StyledTableCell>
+                <StyledTableCell align="center">Дилер</StyledTableCell>
                 <StyledTableCell align="center">
-                  <Link to={item.product_url}>
-                    <Tooltip title={item.product_url}>
-                      <Button>url</Button>
-                    </Tooltip>
-                  </Link>
+                  Дата получения записи
                 </StyledTableCell>
-                <StyledTableCell align="center">{item.price}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {item.dealer_id}
-                </StyledTableCell>
-                <StyledTableCell align="center">{item.date}</StyledTableCell>
 
                 <StyledTableCell align="center">
-                  <BasicButton
-                    text="Перейти в режим разметки"
-                    variant="outlined"
-                    onClick={() =>
-                      navigate(`/compare/${item.pk}`, { replace: true })
-                    }
-                  />
+                  Режим редактирования
                 </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data?.map((item: DealerCardType) => (
+                <StyledTableRow key={item.pk}>
+                  <StyledTableCell component="th" scope="row">
+                    {item.product_name}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {findStatus(item?.matched)}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {item.matched}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <Link to={item.product_url}>
+                      <Tooltip title={item.product_url}>
+                        <Button>url</Button>
+                      </Tooltip>
+                    </Link>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{item.price}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {item.dealer_id}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{item.date}</StyledTableCell>
+
+                  <StyledTableCell align="center">
+                    <BasicButton
+                      text="Перейти в режим разметки"
+                      variant="outlined"
+                      onClick={() =>
+                        navigate(`/compare/${item.pk}`, { replace: true })
+                      }
+                    />
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </>
   );
 }

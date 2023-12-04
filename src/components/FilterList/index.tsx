@@ -9,9 +9,7 @@ import {
 import { BasicButton } from '../BasicButton';
 import { useForm, Controller } from 'react-hook-form';
 import type { SubmitHandler, DefaultValues } from 'react-hook-form';
-import {
-  useGetDealersQuery,
-} from '../../utils/api';
+import { useGetDealersQuery } from '../../utils/api';
 
 export type FormValues = {
   dealer_id: string;
@@ -20,12 +18,14 @@ export type FormValues = {
 };
 
 const filtersDate = [
+  { value: '', label: 'Снять выбор' },
   { value: 'day', label: 'День' },
   { value: 'week', label: 'Неделя' },
   { value: 'month', label: 'Месяц' },
 ];
 
 const filtersStatus = [
+  { value: '', label: 'Снять выбор' },
   { value: 'true', label: 'Есть сопоставление' },
   { value: 'false', label: 'Нет сопоставления' },
 ];
@@ -38,8 +38,10 @@ export const defaultValues: DefaultValues<FormValues> = {
 
 export default function FilterList({
   handleFiltersClick,
+  handleFiltersReset,
 }: {
   handleFiltersClick: (data: FormValues) => void;
+  handleFiltersReset: () => void;
 }) {
   const { handleSubmit, reset, control } = useForm<FormValues>({
     defaultValues,
@@ -72,6 +74,7 @@ export default function FilterList({
           <Controller
             render={({ field }) => (
               <Select {...field} label="Дилер">
+                <MenuItem value="">Снять выбор</MenuItem>
                 {dealersFilters?.results.map((item: any) => {
                   return (
                     <MenuItem key={item.pk} value={item.pk}>
@@ -128,9 +131,10 @@ export default function FilterList({
           type="reset"
           onClick={() => {
             reset(defaultValues);
+            handleFiltersReset();
           }}
         />
-      </Stack>{' '}
+      </Stack>
     </form>
   );
 }
