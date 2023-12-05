@@ -17,7 +17,7 @@ export const api = createApi({
       DealerProductsType,
       { start: number; page_size: number }
     >({
-      query: ({ start = 1, page_size = 20 }) =>
+      query: ({ start, page_size }) =>
         `dealer-products/?limit=${start}&page_size=${page_size}`,
     }),
 

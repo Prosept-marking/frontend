@@ -10,6 +10,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Tooltip,
   tableCellClasses,
 } from '@mui/material';
@@ -80,15 +81,19 @@ function findStatus(matched: boolean, postponed: boolean) {
 export default function MainTable({
   data,
   count,
+  setLimit,
 }: {
   data: DealerCardType[];
   count: number;
+  setLimit: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const navigate = useNavigate();
+
   const [page, setPage] = useState(1);
-  const [pages, setPages] = useState(1);
+
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
+    setLimit(value);
   };
 
   function countPages() {
@@ -171,7 +176,8 @@ export default function MainTable({
               </TableBody>
             </Table>
           </TableContainer>
-          <Stack spacing={2} marginTop={5}>
+
+          <Stack spacing={3} marginTop={5}>
             <Pagination
               count={countPages()}
               page={page}

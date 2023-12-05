@@ -10,20 +10,25 @@ import { DealerCardType } from '../../models/models';
 import Preloader from '../../components/Preloader';
 
 export default function MainPage() {
+  const [limit, setLimit] = useState<number>(1);
+
   const { data: dealerProducts, isLoading: isLoadingInitial } =
     useGetDealerProductsQuery({
-      start: 1,
-      page_size: 10,
+      start: limit,
+      page_size: 20,
     });
 
   const [dealerProductsArray, setDealerProductsArray] = useState<
     DealerCardType[]
   >([]);
+
   const [
     triggerFiltersQuery,
     { data: filteredDealerProducts, isLoading: isLoadingFiltered },
   ] = useLazyFilterDealerProductsQuery();
+
   const filtersString = localStorage.getItem(FILTERS_KEY);
+
   useEffect(() => {
     if (dealerProducts) {
       setDealerProductsArray(dealerProducts.results);
@@ -66,6 +71,7 @@ export default function MainPage() {
           <MainTable
             data={dealerProductsArray}
             count={dealerProducts?.count || 1}
+            setLimit={setLimit}
           />
         </>
       )}
