@@ -1,80 +1,54 @@
 import { useEffect, useState } from 'react';
 import FilterList from '../../components/FilterList';
 import MainTable from '../../components/MainTable';
-import {
-  useGetDealerProductsQuery,
-  useLazyFilterDealerProductsQuery,
-} from '../../store/prosept/prosept.api';
-import { FILTERS_KEY } from '../../utils/constants';
-import { DealerCardType } from '../../models/models';
+import { useLazyFilterDealerProductsQuery } from '../../store/prosept/prosept.api';
+
 import Preloader from '../../components/Preloader';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 export default function MainPage() {
   const [limit, setLimit] = useState<number>(1);
 
-  const { data: dealerProducts, isLoading: isLoadingInitial } =
-    useGetDealerProductsQuery({
-      start: limit,
-      page_size: 20,
-    });
-
-  const [dealerProductsArray, setDealerProductsArray] = useState<
-    DealerCardType[]
-  >([]);
-
   const [
     triggerFiltersQuery,
-    { data: filteredDealerProducts, isLoading: isLoadingFiltered },
+    { data: filteredDealerProducts, isFetching: isLoadingFiltered },
   ] = useLazyFilterDealerProductsQuery();
 
-  const filtersString = localStorage.getItem(FILTERS_KEY);
+  const filterValues = useSelector((state: RootState) => state.prosept.filters);
 
   useEffect(() => {
-    if (dealerProducts) {
-      setDealerProductsArray(dealerProducts.results);
+    if (filterValues !== null) {
+      triggerFiltersQuery({ ...filterValues, limit: limit, page_size: 20 });
     }
-  }, [dealerProducts]);
+  }, [filterValues]);
 
   useEffect(() => {
-    if (filteredDealerProducts) {
-      setDealerProductsArray(filteredDealerProducts.results);
+    if (filterValues !== null) {
+      triggerFiltersQuery({ ...filterValues, limit: limit, page_size: 20 });
     }
-  }, [filteredDealerProducts]);
-
-  useEffect(() => {
-    if (filtersString !== null) {
-      const filters = JSON.parse(filtersString);
-      triggerFiltersQuery(filters);
-    }
-  }, [filtersString]);
+  }, [limit]);
 
   const handleFiltersClick = (filters: any) => {
     triggerFiltersQuery(filters);
   };
 
   const handleFiltersReset = () => {
-    setDealerProductsArray(dealerProducts?.results ?? []);
+    triggerFiltersQuery({ ...filterValues, limit: limit, page_size: 20 });
   };
-
-  console.log(dealerProducts?.count);
 
   return (
     <main className="main">
-      {isLoadingInitial || isLoadingFiltered ? (
-        <Preloader />
-      ) : (
-        <>
-          <FilterList
-            handleFiltersClick={handleFiltersClick}
-            handleFiltersReset={handleFiltersReset}
-          />
-          <MainTable
-            data={dealerProductsArray}
-            count={dealerProducts?.count || 1}
-            setLimit={setLimit}
-          />
-        </>
-      )}
+      <FilterList
+        handleFiltersClick={handleFiltersClick}
+        handleFiltersReset={handleFiltersReset}
+      />
+      <MainTable
+        data={filteredDealerProducts?.results || []}
+        count={filteredDealerProducts?.count || 1}
+        setLimit={setLimit}
+        isLoadingFiltered={isLoadingFiltered}
+      />
     </main>
   );
 }

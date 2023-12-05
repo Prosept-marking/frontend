@@ -14,6 +14,8 @@ import { useActions } from '../../hooks/actions';
 import { useEffect } from 'react';
 import { FILTERS_KEY } from '../../utils/constants';
 import { FormValues } from '../../models/models';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const filtersDate = [
   { value: '', label: 'Снять выбор' },
@@ -51,18 +53,11 @@ export default function FilterList({
     defaultValues,
   });
 
-  const storedFilters = localStorage.getItem(FILTERS_KEY);
+  const filterValues = useSelector((state: RootState) => state.prosept.filters);
 
   function setUpFilters() {
-    if (storedFilters) {
-      const filters = JSON.parse(storedFilters || '');
-
-      defaultValues = {
-        dealer_id: filters.dealer_id,
-        days: filters.days,
-        matched: filters.matched,
-        postponed: filters.postponed,
-      };
+    if (filterValues) {
+      defaultValues = filterValues;
     }
   }
 
@@ -70,7 +65,7 @@ export default function FilterList({
     setUpFilters();
     // only initial render
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filterValues]);
 
   const { data: dealersFilters } = useGetDealersQuery();
   const { setFilters, clearFilters } = useActions();

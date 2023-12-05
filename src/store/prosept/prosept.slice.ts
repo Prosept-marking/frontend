@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FILTERS_KEY } from '../../utils/constants';
 import { FormValues } from '../../models/models';
 
 interface proseptState {
@@ -7,7 +6,7 @@ interface proseptState {
 }
 
 const initialState: proseptState = {
-  filters: JSON.parse(localStorage.getItem(FILTERS_KEY) ?? '[]'),
+  filters: { dealer_id: '', days: '', matched: '', postponed: '' },
 };
 
 export const proseptSlice = createSlice({
@@ -16,11 +15,9 @@ export const proseptSlice = createSlice({
   reducers: {
     setFilters(state, action: PayloadAction<FormValues>) {
       state.filters = action.payload;
-      localStorage.setItem(FILTERS_KEY, JSON.stringify(state.filters));
     },
     clearFilters(state) {
       state.filters = { dealer_id: '', days: '', matched: '', postponed: '' };
-      localStorage.setItem(FILTERS_KEY, JSON.stringify(state.filters));
     },
   },
 });

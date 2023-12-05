@@ -15,23 +15,31 @@ export const api = createApi({
     }),
     getDealerProducts: build.query<
       DealerProductsType,
-      { start: number; page_size: number }
+      { limit: number; page_size: number }
     >({
-      query: ({ start, page_size }) =>
-        `dealer-products/?limit=${start}&page_size=${page_size}`,
+      query: ({ limit, page_size }) =>
+        `dealer-products/?limit=${limit}&page_size=${page_size}`,
     }),
 
     getDealerProductId: build.query<DealerCardType, { id: number }>({
       query: ({ id }) => `/dealer-products/${id}/`,
     }),
     filterDealerProducts: build.query<DealerProductsType, any>({
-      query: ({ dealer_id, matched, days, postponed, page_size = 20 }) => ({
+      query: ({
+        dealer_id,
+        matched,
+        days,
+        postponed,
+        limit,
+        page_size = 20,
+      }) => ({
         url: `dealer-products/`,
         params: {
+          limit,
+          page_size,
           dealer_id,
           matched,
           days,
-          page_size,
           postponed,
         },
       }),

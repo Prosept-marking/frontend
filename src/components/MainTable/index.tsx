@@ -10,12 +10,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
+  LinearProgress,
   Tooltip,
   tableCellClasses,
 } from '@mui/material';
 import { BasicButton } from '../BasicButton';
-import Preloader from '../Preloader';
 import DoneIcon from '../../assets/icons/DoneIcon';
 import DeniedCompareIcon from '../../assets/icons/DeniedCompareIcon';
 import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
@@ -23,6 +22,7 @@ import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
 import { DealerCardType } from '../../models/models';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import Preloader from '../Preloader';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -82,10 +82,12 @@ export default function MainTable({
   data,
   count,
   setLimit,
+  isLoadingFiltered,
 }: {
   data: DealerCardType[];
   count: number;
   setLimit: React.Dispatch<React.SetStateAction<number>>;
+  isLoadingFiltered: boolean;
 }) {
   const navigate = useNavigate();
 
@@ -177,12 +179,16 @@ export default function MainTable({
             </Table>
           </TableContainer>
 
-          <Stack spacing={3} marginTop={5}>
-            <Pagination
-              count={countPages()}
-              page={page}
-              onChange={handleChange}
-            />
+          <Stack spacing={3} marginTop={5} padding={2}>
+            {isLoadingFiltered ? (
+              <Preloader />
+            ) : (
+              <Pagination
+                count={countPages()}
+                page={page}
+                onChange={handleChange}
+              />
+            )}
           </Stack>
         </Stack>
       )}
