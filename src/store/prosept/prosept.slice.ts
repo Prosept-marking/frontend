@@ -19,7 +19,7 @@ export const proseptSlice = createSlice({
       localStorage.setItem(FILTERS_KEY, JSON.stringify(state.filters));
     },
     clearFilters(state) {
-      state.filters = { dealer_id: '', day: '', matched: '', postponed: '' };
+      state.filters = { dealer_id: '', days: '', matched: '', postponed: '' };
       localStorage.setItem(FILTERS_KEY, JSON.stringify(state.filters));
     },
   },

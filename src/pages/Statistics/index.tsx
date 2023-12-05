@@ -1,11 +1,11 @@
 import Preloader from '../../components/Preloader';
-import { DealerCard } from '../../components/DealerCard';
 import { ProductCard } from '../../components/ProductCard';
+import { ResultBox } from '../../components/ResultBox';
 
 export default function Statistics() {
   return (
     <>
-      <DealerCard />
+      <ResultBox result={true} />
       <ProductCard />
       <Preloader />
     </>

@@ -1,34 +1,40 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ProductRelationItem } from '../../models/models';
+import {
+  DealersType,
+  DealerProductsType,
+  ProductRelationItem,
+  DealerCardType,
+} from '../../models/models';
 
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://prosept.hopto.org/api/v1/' }),
   endpoints: (build) => ({
-    getDealers: build.query<any, void>({
+    getDealers: build.query<DealersType, void>({
       query: () => 'dealer-names/',
     }),
-    getDealerProducts: build.query<any, { start: number; page_size: number }>({
+    getDealerProducts: build.query<
+      DealerProductsType,
+      { start: number; page_size: number }
+    >({
       query: ({ start = 1, page_size = 20 }) =>
         `dealer-products/?limit=${start}&page_size=${page_size}`,
-      transformResponse: (response: any) => response.results,
     }),
 
-    getDealerProductId: build.query<any, { id: number }>({
+    getDealerProductId: build.query<DealerCardType, { id: number }>({
       query: ({ id }) => `/dealer-products/${id}/`,
     }),
-    filterDealerProducts: build.query<any, any>({
-      query: ({ dealer_id, matched, day, postponed, page_size = 20 }) => ({
+    filterDealerProducts: build.query<DealerProductsType, any>({
+      query: ({ dealer_id, matched, days, postponed, page_size = 20 }) => ({
         url: `dealer-products/`,
         params: {
           dealer_id,
           matched,
-          day,
+          days,
           page_size,
           postponed,
         },
       }),
-      transformResponse: (response: any) => response.results,
     }),
     getProductRelationId: build.query<any, { id: number }>({
       query: ({ id }) => `/product-relation/${id}/`,

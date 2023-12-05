@@ -79,24 +79,25 @@ function findStatus(matched: boolean, postponed: boolean) {
 
 export default function MainTable({
   data,
-  isLoadingInitial,
-  isLoadingFiltered,
+  count,
 }: {
   data: DealerCardType[];
-  isLoadingInitial: boolean;
-  isLoadingFiltered: boolean;
+  count: number;
 }) {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
+  function countPages() {
+    return Math.ceil(count / 20);
+  }
+
   return (
     <>
-      {isLoadingInitial || isLoadingFiltered ? (
-        <Preloader />
-      ) : data?.length === 0 ? (
+      {data?.length === 0 ? (
         <Paper
           sx={{ p: 5, textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}
         >
@@ -137,7 +138,7 @@ export default function MainTable({
                       {findStatus(item?.matched, item?.postponed)}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {item.matched}
+                      Название товара
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       <Link to={item.product_url}>
@@ -171,7 +172,11 @@ export default function MainTable({
             </Table>
           </TableContainer>
           <Stack spacing={2} marginTop={5}>
-            <Pagination count={10} page={page} onChange={handleChange} />
+            <Pagination
+              count={countPages()}
+              page={page}
+              onChange={handleChange}
+            />
           </Stack>
         </Stack>
       )}

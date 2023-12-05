@@ -6,6 +6,8 @@ import {
   useLazyFilterDealerProductsQuery,
 } from '../../store/prosept/prosept.api';
 import { FILTERS_KEY } from '../../utils/constants';
+import { DealerCardType } from '../../models/models';
+import Preloader from '../../components/Preloader';
 
 export default function MainPage() {
   const { data: dealerProducts, isLoading: isLoadingInitial } =
@@ -14,51 +16,59 @@ export default function MainPage() {
       page_size: 10,
     });
 
-  const [dealerProductsArray, setDealerProductsArray] = useState([]);
+  const [dealerProductsArray, setDealerProductsArray] = useState<
+    DealerCardType[]
+  >([]);
   const [
     triggerFiltersQuery,
     { data: filteredDealerProducts, isLoading: isLoadingFiltered },
   ] = useLazyFilterDealerProductsQuery();
-
+  const filtersString = localStorage.getItem(FILTERS_KEY);
   useEffect(() => {
     if (dealerProducts) {
-      setDealerProductsArray(dealerProducts);
+      setDealerProductsArray(dealerProducts.results);
     }
   }, [dealerProducts]);
 
   useEffect(() => {
     if (filteredDealerProducts) {
-      setDealerProductsArray(filteredDealerProducts);
+      setDealerProductsArray(filteredDealerProducts.results);
     }
   }, [filteredDealerProducts]);
 
   useEffect(() => {
-    const filtersString = localStorage.getItem(FILTERS_KEY);
     if (filtersString !== null) {
       const filters = JSON.parse(filtersString);
       triggerFiltersQuery(filters);
     }
-  }, [localStorage.getItem(FILTERS_KEY)]);
+  }, [filtersString]);
 
   const handleFiltersClick = (filters: any) => {
     triggerFiltersQuery(filters);
   };
 
   const handleFiltersReset = () => {
-    setDealerProductsArray(dealerProducts);
+    setDealerProductsArray(dealerProducts?.results ?? []);
   };
+
+  console.log(dealerProducts?.count);
 
   return (
     <main className="main">
-      <FilterList
-        handleFiltersClick={handleFiltersClick}
-        handleFiltersReset={handleFiltersReset}
-      />
-      <MainTable
-        data={dealerProductsArray}
-        isLoadingInitial={isLoadingInitial}
-        isLoadingFiltered={isLoadingFiltered}
-      />
+      {isLoadingInitial || isLoadingFiltered ? (
+        <Preloader />
+      ) : (
+        <>
+          <FilterList
+            handleFiltersClick={handleFiltersClick}
+            handleFiltersReset={handleFiltersReset}
+          />
+          <MainTable
+            data={dealerProductsArray}
+            count={dealerProducts?.count || 1}
+          />
+        </>
+      )}
     </main>
   );
 }

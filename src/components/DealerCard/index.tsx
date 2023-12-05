@@ -13,7 +13,7 @@ export const DealerCard = ({
   data,
   isLoading,
 }: {
-  data: DealerCardType;
+  data?: DealerCardType;
   isLoading: boolean;
 }) => {
   return isLoading ? (
@@ -35,15 +35,17 @@ export const DealerCard = ({
           Цена: {data.price}
         </Typography>
         <Typography variant="body2">
-          Дата получения записи: {data.date}
+          Дата получения записи: {data.real_date}
         </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Дилер: {data.dealer_id}
+          Дилер: {data.dealer_name}
         </Typography>
       </CardContent>
       <CardActions>
         <Link to={data.product_url} target="_blank">
-          <Button size="small">Ссылка на товар</Button>
+          <Button size="small" variant="outlined">
+            Ссылка на товар
+          </Button>
         </Link>
       </CardActions>
     </Paper>

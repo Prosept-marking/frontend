@@ -11,7 +11,7 @@ import { useForm, Controller } from 'react-hook-form';
 import type { SubmitHandler, DefaultValues } from 'react-hook-form';
 import { useGetDealersQuery } from '../../store/prosept/prosept.api';
 import { useActions } from '../../hooks/actions';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { FILTERS_KEY } from '../../utils/constants';
 import { FormValues } from '../../models/models';
 
@@ -35,7 +35,7 @@ const filtersPostponed = [
 
 let defaultValues: DefaultValues<FormValues> = {
   dealer_id: '',
-  day: '',
+  days: '',
   matched: '',
   postponed: '',
 };
@@ -59,7 +59,7 @@ export default function FilterList({
 
       defaultValues = {
         dealer_id: filters.dealer_id,
-        day: filters.day,
+        days: filters.days,
         matched: filters.matched,
         postponed: filters.postponed,
       };
@@ -68,6 +68,8 @@ export default function FilterList({
 
   useEffect(() => {
     setUpFilters();
+    // only initial render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { data: dealersFilters } = useGetDealersQuery();
@@ -169,7 +171,7 @@ export default function FilterList({
                 })}
               </Select>
             )}
-            name="day"
+            name="days"
             control={control}
           />
         </FormControl>
