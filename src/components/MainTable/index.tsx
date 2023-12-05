@@ -21,7 +21,7 @@ import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
 
 import { DealerCardType } from '../../models/models';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Preloader from '../Preloader';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -88,6 +88,7 @@ export default function MainTable({
   count: number;
   setLimit: React.Dispatch<React.SetStateAction<number>>;
   isLoadingFiltered: boolean;
+  limit: number;
 }) {
   const navigate = useNavigate();
 
@@ -104,7 +105,10 @@ export default function MainTable({
 
   return (
     <>
-      {data?.length === 0 ? (
+      {' '}
+      {isLoadingFiltered ? (
+        <Preloader />
+      ) : data.length === 0 ? (
         <Paper
           sx={{ p: 5, textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}
         >
@@ -148,9 +152,9 @@ export default function MainTable({
                       Название товара
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <Link to={item.product_url}>
+                      <Link to={item.product_url} target="_blank">
                         <Tooltip title={item.product_url}>
-                          <Button>url</Button>
+                          <Button variant="outlined">url</Button>
                         </Tooltip>
                       </Link>
                     </StyledTableCell>
@@ -167,7 +171,7 @@ export default function MainTable({
                     <StyledTableCell align="center">
                       <BasicButton
                         text="Перейти в режим разметки"
-                        variant="outlined"
+                        variant="contained"
                         onClick={() =>
                           navigate(`/compare/${item.pk}`, { replace: true })
                         }

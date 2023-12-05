@@ -55,16 +55,10 @@ export default function FilterList({
 
   const filterValues = useSelector((state: RootState) => state.prosept.filters);
 
-  function setUpFilters() {
+  useEffect(() => {
     if (filterValues) {
       defaultValues = filterValues;
     }
-  }
-
-  useEffect(() => {
-    setUpFilters();
-    // only initial render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues]);
 
   const { data: dealersFilters } = useGetDealersQuery();
@@ -76,9 +70,10 @@ export default function FilterList({
   };
 
   const resetFilters = () => {
-    reset(defaultValues);
-    handleFiltersReset();
     clearFilters();
+    handleFiltersReset();
+    defaultValues = { dealer_id: '', days: '', matched: '', postponed: '' };
+    reset(defaultValues);
   };
 
   return (

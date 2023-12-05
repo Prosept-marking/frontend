@@ -30,6 +30,7 @@ export default function MainPage() {
   }, [limit]);
 
   const handleFiltersClick = (filters: any) => {
+    setLimit(1);
     triggerFiltersQuery(filters);
   };
 
@@ -47,6 +48,7 @@ export default function MainPage() {
         data={filteredDealerProducts?.results || []}
         count={filteredDealerProducts?.count || 1}
         setLimit={setLimit}
+        limit={limit}
         isLoadingFiltered={isLoadingFiltered}
       />
     </main>
