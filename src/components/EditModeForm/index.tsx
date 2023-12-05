@@ -13,6 +13,9 @@ import {
   useGetProductRelationIdQuery,
 } from '../../store/prosept/prosept.api';
 
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+
 export default function EditModeForm() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,6 +24,10 @@ export default function EditModeForm() {
   const relationItem: ProductRelationItem = { id: pathId };
 
   const { data, isLoading } = useGetDealerProductIdQuery({ id: pathId });
+
+  const dealerProductsForPages = useSelector(
+    (state: RootState) => state.dealerProducts.dealerProducts,
+  );
 
   const relationData = useGetProductRelationIdQuery({ id: pathId });
 
@@ -41,7 +48,7 @@ export default function EditModeForm() {
         variant="outlined"
         type="button"
         onClick={() => {
-          navigate('/', { replace: true });
+          navigate('/', { replace: false });
         }}
       />
       <Stack
@@ -67,12 +74,20 @@ export default function EditModeForm() {
         >
           <Typography variant="h4">Карточка дилера</Typography>
           <DealerCard data={data} isLoading={isLoading} />
-          <BasicButton
-            text="Следующий товар"
-            variant="outlined"
-            type="button"
-          />
-          {/* <BasicButton text="Предыдущий товар" variant="outlined" type="button" /> */}
+          <Box display={'flex'} flexDirection={'row'} gap={5}>
+            <BasicButton
+              text="Предыдущий товар"
+              variant="outlined"
+              type="button"
+              onClick={() => navigate(`/compare/${pathId - 1}`)}
+            />
+            <BasicButton
+              text="Следующий товар"
+              variant="outlined"
+              type="button"
+              onClick={() => navigate(`/compare/${pathId + 1}`)}
+            />
+          </Box>
         </Box>
 
         <Divider orientation="vertical" flexItem>

@@ -12,7 +12,6 @@ import type { SubmitHandler, DefaultValues } from 'react-hook-form';
 import { useGetDealersQuery } from '../../store/prosept/prosept.api';
 import { useActions } from '../../hooks/actions';
 import { useEffect } from 'react';
-import { FILTERS_KEY } from '../../utils/constants';
 import { FormValues } from '../../models/models';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';

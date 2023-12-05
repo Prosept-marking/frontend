@@ -3,9 +3,9 @@ import FilterList from '../../components/FilterList';
 import MainTable from '../../components/MainTable';
 import { useLazyFilterDealerProductsQuery } from '../../store/prosept/prosept.api';
 
-import Preloader from '../../components/Preloader';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { useActions } from '../../hooks/actions';
 
 export default function MainPage() {
   const [limit, setLimit] = useState<number>(1);
@@ -17,17 +17,16 @@ export default function MainPage() {
 
   const filterValues = useSelector((state: RootState) => state.prosept.filters);
 
-  useEffect(() => {
-    if (filterValues !== null) {
-      triggerFiltersQuery({ ...filterValues, limit: limit, page_size: 20 });
-    }
-  }, [filterValues]);
+  const { setDealerProducts } = useActions();
 
   useEffect(() => {
     if (filterValues !== null) {
       triggerFiltersQuery({ ...filterValues, limit: limit, page_size: 20 });
     }
-  }, [limit]);
+    if (filteredDealerProducts !== undefined) {
+      setDealerProducts(filteredDealerProducts);
+    }
+  }, [filterValues, limit, filteredDealerProducts]);
 
   const handleFiltersClick = (filters: any) => {
     setLimit(1);

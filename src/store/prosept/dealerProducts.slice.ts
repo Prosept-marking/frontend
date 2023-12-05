@@ -1,19 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DealerCardType } from '../../models/models';
+import { DealerProductsType } from '../../models/models';
 
 interface dealerProductsState {
-  dealerProducts: DealerCardType[];
+  dealerProducts: DealerProductsType;
 }
 
 const initialState: dealerProductsState = {
-  dealerProducts: [],
+  dealerProducts: {
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
+  },
 };
 
 export const dealerProducts = createSlice({
   name: 'dealerProducts',
   initialState,
   reducers: {
-    setDealerProducts(state, action: PayloadAction<DealerCardType[]>) {
+    setDealerProducts(state, action: PayloadAction<DealerProductsType>) {
       state.dealerProducts = action.payload;
     },
   },

@@ -10,7 +10,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  LinearProgress,
   Tooltip,
   tableCellClasses,
 } from '@mui/material';
@@ -21,7 +20,7 @@ import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
 
 import { DealerCardType } from '../../models/models';
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Preloader from '../Preloader';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
