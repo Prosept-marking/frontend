@@ -1,6 +1,5 @@
 import { styled } from '@mui/material/styles';
 import {
-  Box,
   Button,
   Pagination,
   Paper,
@@ -23,7 +22,6 @@ import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
 
 import { DealerCardType } from '../../models/models';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -87,17 +85,20 @@ export default function MainTable({
   count,
   setLimit,
   isLoadingFiltered,
+  page,
+  setPage,
 }: {
   data: DealerCardType[];
   count: number;
   setLimit: React.Dispatch<React.SetStateAction<number>>;
   isLoadingFiltered: boolean;
   limit: number;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const navigate = useNavigate();
 
-  const [page, setPage] = useState(1);
-
+  console.log(page);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
     setLimit(value);
@@ -167,7 +168,7 @@ export default function MainTable({
                       {findStatus(item?.combined_status)}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      Название товара
+                      {item.name_1c_owner}
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       <Link to={item.product_url} target="_blank">

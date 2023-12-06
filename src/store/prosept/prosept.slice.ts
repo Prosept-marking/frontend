@@ -6,7 +6,7 @@ interface proseptState {
 }
 
 const initialState: proseptState = {
-  filters: { dealer_id: '', days: '', matched: '', postponed: '' },
+  filters: { dealer_id: '', days: '', combined_status: '' },
 };
 
 export const proseptSlice = createSlice({
@@ -17,7 +17,7 @@ export const proseptSlice = createSlice({
       state.filters = action.payload;
     },
     clearFilters(state) {
-      state.filters = { dealer_id: '', days: '', matched: '', postponed: '' };
+      state.filters = { dealer_id: '', days: '', combined_status: '' };
     },
   },
 });

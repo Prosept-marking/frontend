@@ -9,6 +9,8 @@ export type DealerCardType = {
   matched: boolean;
   postponed: boolean;
   combined_status: string;
+  name_1c_owner?: string | null;
+  pk_owner_product?: number | null;
 };
 
 export type FormValues = {
@@ -48,6 +50,8 @@ export type DealerProductsType = {
     postponed: boolean;
     real_date: string;
     combined_status: string;
+    name_1c_owner?: string | null;
+    pk_owner_product?: number | null;
   }>;
 };
 
@@ -63,6 +67,8 @@ export type DealerProductIdType = {
   postponed: boolean;
   real_date: string;
   combined_status: string;
+  name_1c_owner?: string | null;
+  pk_owner_product?: number | null;
 };
 
 export type OwnerProductsMatchType = {

@@ -78,7 +78,7 @@ export default function FilterList({
         justifyContent="center"
         alignItems="center"
         alignContent="center"
-        margin={5}
+        margin={2}
         padding={3}
         gap={5}
         direction="row"

@@ -9,6 +9,7 @@ import { useActions } from '../../hooks/actions';
 
 export default function MainPage() {
   const [limit, setLimit] = useState<number>(1);
+  const [page, setPage] = useState(1);
 
   const [
     triggerFiltersQuery,
@@ -31,10 +32,12 @@ export default function MainPage() {
   const handleFiltersClick = (filters: any) => {
     setLimit(1);
     triggerFiltersQuery(filters);
+    setPage(1);
   };
 
   const handleFiltersReset = () => {
     triggerFiltersQuery({ ...filterValues, limit: limit, page_size: 20 });
+    setPage(1);
   };
 
   return (
@@ -49,6 +52,8 @@ export default function MainPage() {
         setLimit={setLimit}
         limit={limit}
         isLoadingFiltered={isLoadingFiltered}
+        page={page}
+        setPage={setPage}
       />
     </main>
   );
