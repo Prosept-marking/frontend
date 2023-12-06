@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Dialog, DialogContent, DialogActions, Button } from '@mui/material';
-import { ProductRelationItem } from '../../models/ProductRelationItem';
+import { ProductRelationItem } from '../../models/models';
 
 interface RelationItemProps {
   relationItem: ProductRelationItem;

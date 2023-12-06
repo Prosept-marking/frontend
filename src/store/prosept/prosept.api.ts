@@ -4,6 +4,7 @@ import {
   DealerProductsType,
   ProductRelationItem,
   DealerCardType,
+  OwnerProductsMatchType,
 } from '../../models/models';
 
 export const api = createApi({
@@ -66,6 +67,18 @@ export const api = createApi({
         method: 'DELETE',
       }),
     }),
+    getOwnerProductsMatchById: build.query<
+      OwnerProductsMatchType,
+      { id: number }
+    >({
+      query: ({ id }) => `/owner-products/match_product/${id}/`,
+    }),
+    updateDealerProductsStatus: build.mutation<DealerCardType, { id: number }>({
+      query: (currentItem) => ({
+        url: `/dealer-products/${currentItem.id}/set_postponed/`,
+        method: 'PATCH',
+      }),
+    }),
   }),
 });
 
@@ -77,4 +90,6 @@ export const {
   useGetProductRelationIdQuery,
   useCreateProductRelationMutation,
   useDeleteProductRelationIdMutation,
+  useGetOwnerProductsMatchByIdQuery,
+  useUpdateDealerProductsStatusMutation,
 } = api;

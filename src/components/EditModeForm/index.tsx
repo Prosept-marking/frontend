@@ -6,11 +6,16 @@ import { DealerCard } from '../DealerCard';
 import { ProductCard } from '../ProductCard';
 
 import { PopupWithConfirm } from '../PopupWithConfirm';
-import { ProductRelationItem } from '../../models/models';
+import {
+  ProductRelationItem,
+  OwnerProductsMatchType,
+} from '../../models/models';
 import {
   useDeleteProductRelationIdMutation,
   useGetDealerProductIdQuery,
   useGetProductRelationIdQuery,
+  useGetOwnerProductsMatchByIdQuery,
+  useUpdateDealerProductsStatusMutation,
 } from '../../store/prosept/prosept.api';
 
 import { useSelector } from 'react-redux';
@@ -33,12 +38,20 @@ export default function EditModeForm() {
 
   const [deleteProductRelationId] = useDeleteProductRelationIdMutation();
 
+  const ownerProductMatch = useGetOwnerProductsMatchByIdQuery({ id: pathId });
+
+  const [updateDealerProductsStatus] = useUpdateDealerProductsStatusMutation();
+
   const handleRemove = (relationItem: ProductRelationItem) => {
     deleteProductRelationId(relationItem);
   };
 
   const renderComponent = () => {
     setIsRenderComponent(true);
+  };
+
+  const updateProductStatus = () => {
+    updateDealerProductsStatus({ id: pathId });
   };
 
   return (
@@ -106,11 +119,10 @@ export default function EditModeForm() {
             maxWidth={'100%'}
             flexShrink={1}
           >
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            {ownerProductMatch.status === 'fulfilled' &&
+              ownerProductMatch.data?.map((item: OwnerProductsMatchType) => (
+                <ProductCard data={item} key={item.owner_id} />
+              ))}
           </Box>
           {relationData.data ? (
             <>
@@ -130,7 +142,11 @@ export default function EditModeForm() {
           ) : (
             <Box display={'flex'} flexDirection={'row'} columnGap={2}>
               <BasicButton text="Сохранить выбор" />
-              <BasicButton text="Отклонить подборку" color="error" />
+              <BasicButton
+                text="Отклонить подборку"
+                color="error"
+                onClick={updateProductStatus}
+              />
             </Box>
           )}
         </Box>

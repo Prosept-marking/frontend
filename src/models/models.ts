@@ -62,3 +62,13 @@ export type DealerProductIdType = {
   postponed: boolean;
   real_date: string;
 };
+
+export type OwnerProductsMatchType = {
+  owner_id: number;
+  article?: number;
+  ean_13?: number;
+  name_1c?: string;
+  cost?: number;
+  recommended_price?: number;
+  category_id?: number;
+};
