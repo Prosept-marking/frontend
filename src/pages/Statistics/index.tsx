@@ -1,13 +1,14 @@
-import Preloader from '../../components/Preloader';
-import { ProductCard } from '../../components/ProductCard';
-import { ResultBox } from '../../components/ResultBox';
+import { Stack } from '@mui/material';
+import BasicTable from '../../components/BasicTable';
+import TodayChart from '../../components/TodayChart';
 
 export default function Statistics() {
   return (
     <>
-      <ResultBox result={true} />
-      <ProductCard />
-      <Preloader />
+      <Stack flexDirection={'column'} alignItems={'flex-start'}>
+        <TodayChart />
+        <BasicTable />
+      </Stack>
     </>
   );
 }
