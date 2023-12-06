@@ -62,6 +62,12 @@ export default function EditModeForm() {
   const handleCurrentElement = (event: React.MouseEvent) => {
     const currentTextElement =
       event.currentTarget.getElementsByClassName('productCard__text')[0];
+
+    const parentElements = document.querySelectorAll('.productCard_active');
+    parentElements.forEach((element) =>
+      element.classList.remove('productCard_active'),
+    );
+
     event.currentTarget.classList.add('productCard_active');
     const productCard_id = parseInt(
       currentTextElement.innerHTML.match(/[0-9]+/)?.[0] || '0',
@@ -114,13 +120,19 @@ export default function EditModeForm() {
               text="Предыдущий товар"
               variant="outlined"
               type="button"
-              onClick={() => navigate(`/compare/${pathId - 1}`)}
+              onClick={() => {
+                navigate(`/compare/${pathId - 1}`);
+                setCurrentId(0);
+              }}
             />
             <BasicButton
               text="Следующий товар"
               variant="outlined"
               type="button"
-              onClick={() => navigate(`/compare/${pathId + 1}`)}
+              onClick={() => {
+                navigate(`/compare/${pathId + 1}`);
+                setCurrentId(0);
+              }}
             />
           </Box>
         </Box>
