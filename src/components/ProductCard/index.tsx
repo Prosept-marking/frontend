@@ -3,6 +3,8 @@ import { FC } from 'react';
 import { Box, CardContent, Typography } from '@mui/material';
 
 export const ProductCard: FC<{
+  onClick?: (event: React.MouseEvent) => void;
+  owner_id?: number;
   data?: {
     article?: number;
     ean_13?: number;
@@ -11,9 +13,10 @@ export const ProductCard: FC<{
     recommended_price?: number;
     category_id?: number;
   };
-}> = ({ data }) => {
+}> = ({ data, onClick, owner_id }) => {
   return (
     <Paper
+      onClick={onClick}
       sx={{
         maxWidth: 450,
         '&: hover': {
@@ -31,6 +34,13 @@ export const ProductCard: FC<{
       <CardContent>
         <Box display={'flex'} gap={1} flexDirection={'column'} maxWidth={'sm'}>
           <Box display={'flex'} flexDirection={'column'}>
+            <Typography
+              className="productCard__text"
+              sx={{ fontSize: 14 }}
+              color="text.disabled"
+            >
+              id: {owner_id}
+            </Typography>
             <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.disabled">
               Название товара (1С):
             </Typography>

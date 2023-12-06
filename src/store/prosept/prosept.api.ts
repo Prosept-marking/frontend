@@ -5,6 +5,7 @@ import {
   ProductRelationItem,
   DealerCardType,
   OwnerProductsMatchType,
+  ProductRelationCreateType,
 } from '../../models/models';
 
 export const api = createApi({
@@ -41,13 +42,13 @@ export const api = createApi({
       query: ({ id }) => `/product-relation/${id}/`,
     }),
     createProductRelation: build.mutation<
-      ProductRelationItem,
-      ProductRelationItem
+      ProductRelationCreateType,
+      ProductRelationCreateType
     >({
       query: (relationItem) => ({
         url: `/product-relation/`,
         method: 'POST',
-        body: [relationItem],
+        body: relationItem,
       }),
     }),
     deleteProductRelationId: build.mutation<

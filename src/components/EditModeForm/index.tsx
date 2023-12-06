@@ -9,6 +9,7 @@ import { PopupWithConfirm } from '../PopupWithConfirm';
 import {
   ProductRelationItem,
   OwnerProductsMatchType,
+  ProductRelationCreateType,
 } from '../../models/models';
 import {
   useDeleteProductRelationIdMutation,
@@ -16,6 +17,7 @@ import {
   useGetProductRelationIdQuery,
   useGetOwnerProductsMatchByIdQuery,
   useUpdateDealerProductsStatusMutation,
+  useCreateProductRelationMutation,
 } from '../../store/prosept/prosept.api';
 
 import { useSelector } from 'react-redux';
@@ -25,8 +27,10 @@ export default function EditModeForm() {
   const navigate = useNavigate();
   const location = useLocation();
   const pathId = parseInt(location.pathname.match(/\d+/)?.[0] || '0', 10);
-  const [isRenderComponent, setIsRenderComponent] = React.useState(false);
+  const [isRenderComponent, setIsRenderComponent] =
+    React.useState<boolean>(false);
   const relationItem: ProductRelationItem = { id: pathId };
+  const [currentId, setCurrentId] = React.useState<number>(0);
 
   const { data, isLoading } = useGetDealerProductIdQuery({ id: pathId });
 
@@ -36,6 +40,7 @@ export default function EditModeForm() {
 
   const relationData = useGetProductRelationIdQuery({ id: pathId });
 
+  const [createProductRelation] = useCreateProductRelationMutation();
   const [deleteProductRelationId] = useDeleteProductRelationIdMutation();
 
   const ownerProductMatch = useGetOwnerProductsMatchByIdQuery({ id: pathId });
@@ -52,6 +57,22 @@ export default function EditModeForm() {
 
   const updateProductStatus = () => {
     updateDealerProductsStatus({ id: pathId });
+  };
+
+  const handleCurrentElement = (event: React.MouseEvent) => {
+    const currentTextElement =
+      event.currentTarget.getElementsByClassName('productCard__text')[0];
+    const productCard_id = parseInt(
+      currentTextElement.innerHTML.match(/[0-9]+/)?.[0] || '0',
+      10,
+    );
+    setCurrentId(productCard_id);
+  };
+
+  const handleCreateProductRelation = async (
+    createRelationItem: ProductRelationCreateType,
+  ) => {
+    await createProductRelation(createRelationItem);
   };
 
   return (
@@ -118,7 +139,12 @@ export default function EditModeForm() {
           >
             {ownerProductMatch.status === 'fulfilled' &&
               ownerProductMatch.data?.map((item: OwnerProductsMatchType) => (
-                <ProductCard data={item} key={item.owner_id} />
+                <ProductCard
+                  data={item}
+                  key={item.owner_id}
+                  onClick={handleCurrentElement}
+                  owner_id={item.owner_id}
+                />
               ))}
           </Box>
           {relationData.data ? (
@@ -138,7 +164,23 @@ export default function EditModeForm() {
             </>
           ) : (
             <Box display={'flex'} flexDirection={'row'} columnGap={2}>
-              <BasicButton text="Сохранить выбор" />
+              <BasicButton
+                text="Сохранить выбор"
+                onClick={() => {
+                  if (currentId !== 0) {
+                    console.log({
+                      dealer_product: pathId,
+                      owner_product: currentId,
+                    });
+                    handleCreateProductRelation({
+                      dealer_product: pathId,
+                      owner_product: currentId,
+                    } as ProductRelationCreateType);
+                  } else {
+                    alert('Выберите элемент для сохранения!!!!');
+                  }
+                }}
+              />
               <BasicButton
                 text="Отклонить подборку"
                 color="error"

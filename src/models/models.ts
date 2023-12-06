@@ -80,3 +80,8 @@ export type OwnerProductsMatchType = {
   recommended_price?: number;
   category_id?: number;
 };
+
+export type ProductRelationCreateType = {
+  dealer_product: number;
+  owner_product: number;
+};
