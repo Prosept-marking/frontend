@@ -62,6 +62,7 @@ export default function EditModeForm() {
   const handleCurrentElement = (event: React.MouseEvent) => {
     const currentTextElement =
       event.currentTarget.getElementsByClassName('productCard__text')[0];
+    event.currentTarget.classList.add('productCard_active');
     const productCard_id = parseInt(
       currentTextElement.innerHTML.match(/[0-9]+/)?.[0] || '0',
       10,

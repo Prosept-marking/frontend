@@ -16,6 +16,7 @@ export const ProductCard: FC<{
 }> = ({ data, onClick, owner_id }) => {
   return (
     <Paper
+      className="productCard"
       onClick={onClick}
       sx={{
         maxWidth: 450,
@@ -27,6 +28,10 @@ export const ProductCard: FC<{
         '&: active': {
           boxShadow: '0 0 15px red',
           transition: 'background-color .5s, transform 2s',
+        },
+
+        '&.productCard_active': {
+          backgroundColor: '#9fceb8',
         },
       }}
       elevation={5}
