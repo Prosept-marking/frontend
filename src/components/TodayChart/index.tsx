@@ -16,7 +16,7 @@ const data = [
 export default function TodayChart() {
   return (
     <>
-      <Typography variant="h5" component="div">
+      <Typography variant="h5" component="h2" color="primary">
         Статистика по текущему дню
       </Typography>
 
@@ -40,7 +40,7 @@ export default function TodayChart() {
             padding: 0,
           },
         }}
-        height={300}
+        height={220}
         maxWidth={1200}
       />
     </>

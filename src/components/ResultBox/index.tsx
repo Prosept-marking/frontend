@@ -14,7 +14,10 @@ export const ResultBox: FC<{
       maxWidth={'sm'}
       alignItems={'center'}
     >
-      <Typography sx={{ fontSize: 30, mb: 1.5 }} color="text.secondary">
+      <Typography
+        sx={{ fontSize: 30, mb: 1.5 }}
+        color={result ? 'text.secondary' : 'error'}
+      >
         {result
           ? `Товар сопоставленный оператором:`
           : `Подборка была отклонена оператором`}

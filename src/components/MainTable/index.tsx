@@ -98,7 +98,6 @@ export default function MainTable({
 }) {
   const navigate = useNavigate();
 
-  console.log(page);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
     setLimit(value);
@@ -150,7 +149,7 @@ export default function MainTable({
                   <StyledTableCell align="center">Цена</StyledTableCell>
                   <StyledTableCell align="center">Дилер</StyledTableCell>
                   <StyledTableCell align="center">
-                    Дата получения записи
+                    Дата последней записи
                   </StyledTableCell>
 
                   <StyledTableCell align="center">
@@ -203,15 +202,14 @@ export default function MainTable({
           </TableContainer>
         </Stack>
       )}
-      <Stack spacing={3} marginTop={5} padding={2}>
+      <Stack spacing={3} marginTop={5} padding={2} alignItems={'center'}>
         <Typography
           variant="subtitle1"
           sx={{ marginTop: 2 }}
           color={'secondary'}
         >
-          {' '}
           {isLoadingFiltered ? (
-            <Skeleton width={'100%'} />
+            <Skeleton width={'10vw'} />
           ) : (
             `Кол-во позиций: ${count}`
           )}

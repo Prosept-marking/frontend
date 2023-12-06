@@ -1,10 +1,8 @@
-import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { BasicButton } from '../BasicButton';
 import { Box, Divider, Stack, Typography } from '@mui/material';
+import { BasicButton } from '../BasicButton';
 import { DealerCard } from '../DealerCard';
 import { ProductCard } from '../ProductCard';
-
 import { PopupWithConfirm } from '../PopupWithConfirm';
 import {
   ProductRelationItem,
@@ -14,7 +12,7 @@ import {
 import {
   useDeleteProductRelationIdMutation,
   useGetDealerProductIdQuery,
-  useGetProductRelationIdQuery,
+  useLazyGetProductRelationIdQuery,
   useGetOwnerProductsMatchByIdQuery,
   useUpdateDealerProductsStatusMutation,
   useCreateProductRelationMutation,
@@ -22,23 +20,48 @@ import {
 
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { ResultBox } from '../ResultBox';
+import { useEffect, useState } from 'react';
 
 export default function EditModeForm() {
   const navigate = useNavigate();
   const location = useLocation();
   const pathId = parseInt(location.pathname.match(/\d+/)?.[0] || '0', 10);
-  const [isRenderComponent, setIsRenderComponent] =
-    React.useState<boolean>(false);
+  const [isRenderComponent, setIsRenderComponent] = useState<boolean>(false);
   const relationItem: ProductRelationItem = { id: pathId };
-  const [currentId, setCurrentId] = React.useState<number>(0);
+  const [currentId, setCurrentId] = useState<number>(0);
 
-  const { data, isLoading } = useGetDealerProductIdQuery({ id: pathId });
+  const { data: dealerCardData, isLoading } = useGetDealerProductIdQuery({
+    id: pathId,
+  });
 
   const dealerProductsForPages = useSelector(
     (state: RootState) => state.dealerProducts.dealerProducts,
   );
 
-  const relationData = useGetProductRelationIdQuery({ id: pathId });
+  // console.log("массив", dealerProductsForPages);
+
+  function findNextPage() {
+    const current = dealerProductsForPages.results.find(
+      (item) => item.pk === pathId,
+    );
+
+    const next =
+      dealerProductsForPages.results[
+        dealerProductsForPages.results.indexOf(current!) + 1
+      ];
+
+    if (dealerProductsForPages.results.length !== 0) return next.pk;
+
+    return 1;
+    // console.log("current", current);
+    // console.log("next", next);
+  }
+
+  const [
+    triggerRelationDataQuery,
+    { data: relationData, isFetching: isLoadindRelationData },
+  ] = useLazyGetProductRelationIdQuery();
 
   const [createProductRelation] = useCreateProductRelationMutation();
   const [deleteProductRelationId] = useDeleteProductRelationIdMutation();
@@ -46,6 +69,12 @@ export default function EditModeForm() {
   const ownerProductMatch = useGetOwnerProductsMatchByIdQuery({ id: pathId });
 
   const [updateDealerProductsStatus] = useUpdateDealerProductsStatusMutation();
+
+  useEffect(() => {
+    if (dealerCardData?.combined_status === 'matched') {
+      triggerRelationDataQuery({ id: pathId });
+    }
+  }, [dealerCardData]);
 
   const handleRemove = (relationItem: ProductRelationItem) => {
     deleteProductRelationId(relationItem);
@@ -82,6 +111,84 @@ export default function EditModeForm() {
     await createProductRelation(createRelationItem);
   };
 
+  function setResponceVariant(status: string) {
+    switch (status) {
+      case 'unprocessed': {
+        return (
+          <>
+            <Typography variant="h4">Выберите товар производителя</Typography>
+            <Box
+              display={'flex'}
+              flexDirection={'row'}
+              flexWrap={'wrap'}
+              gap={5}
+              maxWidth={'100%'}
+              flexShrink={1}
+            >
+              {ownerProductMatch.status === 'fulfilled' &&
+                ownerProductMatch.data?.map((item: OwnerProductsMatchType) => (
+                  <ProductCard
+                    data={item}
+                    key={item.owner_id}
+                    onClick={handleCurrentElement}
+                    owner_id={item.owner_id}
+                  />
+                ))}
+            </Box>
+            <Box display={'flex'} flexDirection={'row'} columnGap={2}>
+              <BasicButton
+                text="Сохранить выбор"
+                onClick={() => {
+                  if (currentId !== 0) {
+                    console.log({
+                      dealer_product: pathId,
+                      owner_product: currentId,
+                    });
+                    handleCreateProductRelation({
+                      dealer_product: pathId,
+                      owner_product: currentId,
+                    } as ProductRelationCreateType);
+                  } else {
+                    alert('Выберите элемент для сохранения!!!!');
+                  }
+                }}
+              />
+              <BasicButton
+                text="Отклонить подборку"
+                color="error"
+                onClick={updateProductStatus}
+              />
+            </Box>
+          </>
+        );
+      }
+      case 'postponed':
+        return (
+          <ResultBox result={false}></ResultBox>
+          //// TODO Сюда нужна кнопка "сравнить заново"
+        );
+
+      case 'matched':
+        return (
+          <>
+            <ResultBox data={relationData} result={true}></ResultBox>
+            <BasicButton
+              text="Отменить сопоставление"
+              color="error"
+              onClick={renderComponent}
+            />
+            {isRenderComponent && (
+              <PopupWithConfirm
+                remove={handleRemove}
+                relationItem={relationItem}
+                isOpenPopup={true}
+              />
+            )}
+          </>
+        );
+    }
+  }
+
   return (
     <>
       <BasicButton
@@ -114,7 +221,7 @@ export default function EditModeForm() {
           flexShrink={0}
         >
           <Typography variant="h4">Товар дилера</Typography>
-          <DealerCard data={data} isLoading={isLoading} />
+          <DealerCard data={dealerCardData} isLoading={isLoading} />
           <Box display={'flex'} flexDirection={'row'} gap={5}>
             <BasicButton
               text="Предыдущий товар"
@@ -141,66 +248,8 @@ export default function EditModeForm() {
           ⇒
         </Divider>
         <Box display={'flex'} flexDirection={'column'} gap={5}>
-          <Typography variant="h4">Выберите товар производителя</Typography>
-          <Box
-            display={'flex'}
-            flexDirection={'row'}
-            flexWrap={'wrap'}
-            gap={5}
-            maxWidth={'100%'}
-            flexShrink={1}
-          >
-            {ownerProductMatch.status === 'fulfilled' &&
-              ownerProductMatch.data?.map((item: OwnerProductsMatchType) => (
-                <ProductCard
-                  data={item}
-                  key={item.owner_id}
-                  onClick={handleCurrentElement}
-                  owner_id={item.owner_id}
-                />
-              ))}
-          </Box>
-          {relationData.data ? (
-            <>
-              <BasicButton
-                text="Отменить сопоставление"
-                color="info"
-                onClick={renderComponent}
-              />
-              {isRenderComponent && (
-                <PopupWithConfirm
-                  remove={handleRemove}
-                  relationItem={relationItem}
-                  isOpenPopup={true}
-                />
-              )}
-            </>
-          ) : (
-            <Box display={'flex'} flexDirection={'row'} columnGap={2}>
-              <BasicButton
-                text="Сохранить выбор"
-                onClick={() => {
-                  if (currentId !== 0) {
-                    console.log({
-                      dealer_product: pathId,
-                      owner_product: currentId,
-                    });
-                    handleCreateProductRelation({
-                      dealer_product: pathId,
-                      owner_product: currentId,
-                    } as ProductRelationCreateType);
-                  } else {
-                    alert('Выберите элемент для сохранения!!!!');
-                  }
-                }}
-              />
-              <BasicButton
-                text="Отклонить подборку"
-                color="error"
-                onClick={updateProductStatus}
-              />
-            </Box>
-          )}
+          {dealerCardData?.combined_status &&
+            setResponceVariant(dealerCardData.combined_status)}
         </Box>
       </Stack>
     </>

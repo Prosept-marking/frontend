@@ -25,11 +25,6 @@ export const ProductCard: FC<{
           transition: 'background-color .5s, transform 2s',
           cursor: 'pointer',
         },
-        '&: active': {
-          boxShadow: '0 0 15px red',
-          transition: 'background-color .5s, transform 2s',
-        },
-
         '&.productCard_active': {
           backgroundColor: '#9fceb8',
         },

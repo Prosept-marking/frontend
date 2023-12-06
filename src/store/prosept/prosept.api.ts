@@ -80,7 +80,7 @@ export const {
   useGetDealerProductsQuery,
   useGetDealerProductIdQuery,
   useLazyFilterDealerProductsQuery,
-  useGetProductRelationIdQuery,
+  useLazyGetProductRelationIdQuery,
   useCreateProductRelationMutation,
   useDeleteProductRelationIdMutation,
   useGetOwnerProductsMatchByIdQuery,
