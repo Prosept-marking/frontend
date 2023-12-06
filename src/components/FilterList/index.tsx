@@ -25,20 +25,15 @@ const filtersDate = [
 
 const filtersStatus = [
   { value: '', label: 'Снять выбор' },
-  { value: 'true', label: 'Есть сопоставление' },
-  { value: 'false', label: 'Нет сопоставления' },
-];
-
-const filtersPostponed = [
-  { value: '', label: 'Снять выбор' },
-  { value: 'true', label: 'Сравнение отклонено' },
+  { value: 'matched', label: 'Есть сопоставление' },
+  { value: 'unprocessed', label: 'Нет сопоставления' },
+  { value: 'postponed', label: 'Выборка отклонена' },
 ];
 
 let defaultValues: DefaultValues<FormValues> = {
   dealer_id: '',
   days: '',
-  matched: '',
-  postponed: '',
+  combined_status: '',
 };
 
 export default function FilterList({
@@ -71,7 +66,7 @@ export default function FilterList({
   const resetFilters = () => {
     clearFilters();
     handleFiltersReset();
-    defaultValues = { dealer_id: '', days: '', matched: '', postponed: '' };
+    defaultValues = { dealer_id: '', days: '', combined_status: '' };
     reset(defaultValues);
   };
 
@@ -124,25 +119,7 @@ export default function FilterList({
                 })}
               </Select>
             )}
-            name="matched"
-            control={control}
-          />
-        </FormControl>
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel>Отклонено</InputLabel>
-          <Controller
-            render={({ field }) => (
-              <Select {...field} label="Отклонено">
-                {filtersPostponed.map((item) => {
-                  return (
-                    <MenuItem key={item.label} value={item.value}>
-                      {item.label}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            )}
-            name="postponed"
+            name="combined_status"
             control={control}
           />
         </FormControl>

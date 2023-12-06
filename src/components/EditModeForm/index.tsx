@@ -85,7 +85,7 @@ export default function EditModeForm() {
           top={100}
           flexShrink={0}
         >
-          <Typography variant="h4">Карточка дилера</Typography>
+          <Typography variant="h4">Товар дилера</Typography>
           <DealerCard data={data} isLoading={isLoading} />
           <Box display={'flex'} flexDirection={'row'} gap={5}>
             <BasicButton
@@ -103,14 +103,11 @@ export default function EditModeForm() {
           </Box>
         </Box>
 
-        <Divider orientation="vertical" flexItem>
-          Выберите <br />
-          совпадение
+        <Divider orientation="vertical" flexItem sx={{ fontSize: 40 }}>
+          ⇒
         </Divider>
         <Box display={'flex'} flexDirection={'column'} gap={5}>
-          <Typography variant="h4">
-            Список товаров, предложенных моделью
-          </Typography>
+          <Typography variant="h4">Выберите товар производителя</Typography>
           <Box
             display={'flex'}
             flexDirection={'row'}

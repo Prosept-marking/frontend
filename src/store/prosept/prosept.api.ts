@@ -9,7 +9,7 @@ import {
 
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://prosept.hopto.org/api/v1/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://prosept.hopto.org/api/v1/' }),
   endpoints: (build) => ({
     getDealers: build.query<DealersType, void>({
       query: () => 'dealer-names/',
@@ -26,22 +26,14 @@ export const api = createApi({
       query: ({ id }) => `/dealer-products/${id}/`,
     }),
     filterDealerProducts: build.query<DealerProductsType, any>({
-      query: ({
-        dealer_id,
-        matched,
-        days,
-        postponed,
-        limit,
-        page_size = 20,
-      }) => ({
+      query: ({ dealer_id, days, combined_status, limit, page_size = 20 }) => ({
         url: `dealer-products/`,
         params: {
           limit,
           page_size,
           dealer_id,
-          matched,
           days,
-          postponed,
+          combined_status,
         },
       }),
     }),
@@ -68,7 +60,7 @@ export const api = createApi({
       }),
     }),
     getOwnerProductsMatchById: build.query<
-      OwnerProductsMatchType,
+      OwnerProductsMatchType[],
       { id: number }
     >({
       query: ({ id }) => `/owner-products/match_product/${id}/`,

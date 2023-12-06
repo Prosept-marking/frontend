@@ -1,8 +1,10 @@
 import { styled } from '@mui/material/styles';
 import {
+  Box,
   Button,
   Pagination,
   Paper,
+  Skeleton,
   Stack,
   Table,
   TableBody,
@@ -11,6 +13,7 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  Typography,
   tableCellClasses,
 } from '@mui/material';
 import { BasicButton } from '../BasicButton';
@@ -21,7 +24,6 @@ import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
 import { DealerCardType } from '../../models/models';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Preloader from '../Preloader';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,9 +51,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function findStatus(matched: boolean, postponed: boolean) {
-  switch (matched) {
-    case true:
+function findStatus(combined_status: string) {
+  switch (combined_status) {
+    case 'matched':
       return (
         <Tooltip title="Cовпадение подтверждено">
           <span>
@@ -60,14 +62,17 @@ function findStatus(matched: boolean, postponed: boolean) {
         </Tooltip>
       );
 
-    case false:
-      return postponed ? (
+    case 'postponed':
+      return (
         <Tooltip title="Сравнение отклонено">
           <span>
             <DeniedCompareIcon />
           </span>
         </Tooltip>
-      ) : (
+      );
+
+    case 'unprocessed':
+      return (
         <Tooltip title="Необходимо подтверждение">
           <span>
             <NeedsCompareIcon />
@@ -103,10 +108,15 @@ export default function MainTable({
   }
 
   return (
-    <>
-      {' '}
+    <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
       {isLoadingFiltered ? (
-        <Preloader />
+        <Skeleton
+          variant="rounded"
+          width={'100%'}
+          height={'60vh'}
+          animation="wave"
+          style={{ margin: '0 auto' }}
+        />
       ) : data.length === 0 ? (
         <Paper
           sx={{ p: 5, textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}
@@ -114,9 +124,18 @@ export default function MainTable({
           Ничего не нашлось
         </Paper>
       ) : (
-        <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <Stack
+          display={'flex'}
+          justifyContent={'center'}
+          alignItems={'center'}
+          sx={{ width: '100%' }}
+        >
+          <TableContainer component={Paper} sx={{ maxHeight: '60vh' }}>
+            <Table
+              sx={{ minWidth: 700 }}
+              aria-label="customized table"
+              stickyHeader
+            >
               <TableHead>
                 <TableRow>
                   <StyledTableCell>Наименование товара</StyledTableCell>
@@ -145,7 +164,7 @@ export default function MainTable({
                       {item.product_name}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {findStatus(item?.matched, item?.postponed)}
+                      {findStatus(item?.combined_status)}
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       Название товара
@@ -181,20 +200,23 @@ export default function MainTable({
               </TableBody>
             </Table>
           </TableContainer>
-
-          <Stack spacing={3} marginTop={5} padding={2}>
-            {isLoadingFiltered ? (
-              <Preloader />
-            ) : (
-              <Pagination
-                count={countPages()}
-                page={page}
-                onChange={handleChange}
-              />
-            )}
-          </Stack>
         </Stack>
       )}
-    </>
+      <Stack spacing={3} marginTop={5} padding={2}>
+        <Typography
+          variant="subtitle1"
+          sx={{ marginTop: 2 }}
+          color={'secondary'}
+        >
+          {' '}
+          {isLoadingFiltered ? (
+            <Skeleton width={'100%'} />
+          ) : (
+            `Кол-во позиций: ${count}`
+          )}
+        </Typography>
+        <Pagination count={countPages()} page={page} onChange={handleChange} />
+      </Stack>
+    </Stack>
   );
 }

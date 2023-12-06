@@ -8,13 +8,13 @@ export type DealerCardType = {
   real_date: string;
   matched: boolean;
   postponed: boolean;
+  combined_status: string;
 };
 
 export type FormValues = {
   dealer_id?: string | '';
   days?: string | '';
-  matched?: string | '';
-  postponed?: string | '';
+  combined_status?: string | '';
 };
 
 export interface ProductRelationItem {
@@ -47,6 +47,7 @@ export type DealerProductsType = {
     matched: boolean;
     postponed: boolean;
     real_date: string;
+    combined_status: string;
   }>;
 };
 
@@ -61,6 +62,7 @@ export type DealerProductIdType = {
   matched: boolean;
   postponed: boolean;
   real_date: string;
+  combined_status: string;
 };
 
 export type OwnerProductsMatchType = {
