@@ -16,6 +16,7 @@ import {
   useLazyGetOwnerProductsMatchByIdQuery,
   useUpdateDealerProductsStatusMutation,
   useCreateProductRelationMutation,
+  useChangeDealerProductStatusMutation,
 } from '../../store/prosept/prosept.api';
 
 import { useSelector } from 'react-redux';
@@ -34,6 +35,9 @@ export default function EditModeForm() {
 
   const [isSaveChoice, setIsSaveChoice] = useState<boolean>(false);
   const [isRejectChoice, setIsRejectChoice] = useState<boolean>(false);
+  const [isUnprocessedStatus, setIsUnprocessedStatus] =
+    useState<boolean>(false);
+  const [isDeleteComparsion, setIsDeleteComparsion] = useState<boolean>(false);
 
   const [
     triggerDealerProductIdQuery,
@@ -43,8 +47,6 @@ export default function EditModeForm() {
   const dealerProductsForPages = useSelector(
     (state: RootState) => state.dealerProducts.dealerProducts,
   );
-
-  // console.log("массив", dealerProductsForPages);
 
   useEffect(() => {
     triggerDealerProductIdQuery({ id: pathId });
@@ -63,8 +65,6 @@ export default function EditModeForm() {
     if (dealerProductsForPages.results.length !== 0) return next.pk;
 
     return 1;
-    // console.log("current", current);
-    // console.log("next", next);
   }
 
   const [
@@ -87,6 +87,9 @@ export default function EditModeForm() {
   const [updateDealerProductsStatus, { isLoading: isLoadingUpdateStatus }] =
     useUpdateDealerProductsStatusMutation();
 
+  const [changeDealerProductStatus, { isLoading: isLoadingChangeStatus }] =
+    useChangeDealerProductStatusMutation();
+
   useEffect(() => {
     if (dealerCardData?.combined_status === 'matched') {
       triggerRelatedOwnerProductQuery({
@@ -105,6 +108,7 @@ export default function EditModeForm() {
 
   const handleRemove = (relationItem: ProductRelationItem) => {
     deleteProductRelationId(relationItem);
+    setIsDeleteComparsion(true);
   };
 
   const renderComponent = () => {
@@ -113,6 +117,7 @@ export default function EditModeForm() {
 
   const updateProductStatus = () => {
     updateDealerProductsStatus({ id: pathId });
+    setIsRejectChoice(true);
   };
 
   const handleCurrentElement = (event: React.MouseEvent) => {
@@ -138,6 +143,11 @@ export default function EditModeForm() {
     await createProductRelation(createRelationItem);
   };
 
+  const handleRecomparison = () => {
+    changeDealerProductStatus({ id: pathId });
+    setIsUnprocessedStatus(true);
+  };
+
   useEffect(() => {
     triggerDealerProductIdQuery({ id: pathId });
     setIsSaveChoice(false);
@@ -147,6 +157,16 @@ export default function EditModeForm() {
     triggerDealerProductIdQuery({ id: pathId });
     setIsRejectChoice(false);
   }, [isRejectChoice]);
+
+  useEffect(() => {
+    triggerDealerProductIdQuery({ id: pathId });
+    setIsUnprocessedStatus(false);
+  }, [isUnprocessedStatus]);
+
+  useEffect(() => {
+    triggerDealerProductIdQuery({ id: pathId });
+    setIsDeleteComparsion(false);
+  }, [isDeleteComparsion]);
 
   function setResponceVariant(status: string) {
     switch (status) {
@@ -165,7 +185,8 @@ export default function EditModeForm() {
               {isLoadingOwnerProducts ||
               isLoadingCreateProduct ||
               isLoadingUpdateStatus ||
-              isLoadingDeleteProductRelation ? (
+              isLoadingDeleteProductRelation ||
+              isLoadingChangeStatus ? (
                 <Preloader />
               ) : (
                 ownerProductMatch?.map((item: OwnerProductsMatchType) => (
@@ -198,7 +219,6 @@ export default function EditModeForm() {
                 color="error"
                 onClick={() => {
                   updateProductStatus();
-                  setIsRejectChoice(true);
                 }}
               />
             </Box>
@@ -207,8 +227,16 @@ export default function EditModeForm() {
 
       case 'postponed':
         return (
-          <ResultBox result={false}></ResultBox>
-          //// TODO Сюда нужна кнопка "сравнить заново"
+          <>
+            <ResultBox result={false}></ResultBox>
+            <BasicButton
+              text="Сравнить заново"
+              color="info"
+              onClick={() => {
+                handleRecomparison();
+              }}
+            />
+          </>
         );
 
       case 'matched':
