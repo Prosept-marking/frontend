@@ -11,7 +11,7 @@ import {
 } from '../../models/models';
 import {
   useDeleteProductRelationIdMutation,
-  useGetDealerProductIdQuery,
+  useLazyGetDealerProductIdQuery,
   useLazyGetRelatedOwnerProductQuery,
   useGetOwnerProductsMatchByIdQuery,
   useUpdateDealerProductsStatusMutation,
@@ -32,10 +32,13 @@ export default function EditModeForm() {
   const relationItem: ProductRelationItem = { id: pathId };
   const [currentId, setCurrentId] = useState<number>(0);
 
-  const { data: dealerCardData, isFetching: isLoadingDealerCard } =
-    useGetDealerProductIdQuery({
-      id: pathId,
-    });
+  const [isSaveChoice, setIsSaveChoice] = useState<boolean>(false);
+  const [isRejectChoice, setIsRejectChoice] = useState<boolean>(false);
+
+  const [
+    triggerDealerProductIdQuery,
+    { data: dealerCardData, isFetching: isLoadingDealerCard },
+  ] = useLazyGetDealerProductIdQuery();
 
   const dealerProductsForPages = useSelector(
     (state: RootState) => state.dealerProducts.dealerProducts,
@@ -65,13 +68,18 @@ export default function EditModeForm() {
     { data: relationData, isFetching: isLoadindRelationData },
   ] = useLazyGetRelatedOwnerProductQuery();
 
-  const [createProductRelation] = useCreateProductRelationMutation();
-  const [deleteProductRelationId] = useDeleteProductRelationIdMutation();
+  const [createProductRelation, { isLoading: isLoadingCreateProduct }] =
+    useCreateProductRelationMutation();
+  const [
+    deleteProductRelationId,
+    { isLoading: isLoadingDeleteProductRelation },
+  ] = useDeleteProductRelationIdMutation();
 
   const { data: ownerProductMatch, isFetching: isLoadingOwnerProducts } =
     useGetOwnerProductsMatchByIdQuery({ id: pathId });
 
-  const [updateDealerProductsStatus] = useUpdateDealerProductsStatusMutation();
+  const [updateDealerProductsStatus, { isLoading: isLoadingUpdateStatus }] =
+    useUpdateDealerProductsStatusMutation();
 
   useEffect(() => {
     if (dealerCardData?.combined_status === 'matched') {
@@ -116,6 +124,16 @@ export default function EditModeForm() {
     await createProductRelation(createRelationItem);
   };
 
+  useEffect(() => {
+    triggerDealerProductIdQuery({ id: pathId });
+    setIsSaveChoice(false);
+  }, [isSaveChoice]);
+
+  useEffect(() => {
+    triggerDealerProductIdQuery({ id: pathId });
+    setIsRejectChoice(false);
+  }, [isRejectChoice]);
+
   function setResponceVariant(status: string) {
     switch (status) {
       case 'unprocessed': {
@@ -130,7 +148,10 @@ export default function EditModeForm() {
               maxWidth={'100%'}
               flexShrink={1}
             >
-              {isLoadingOwnerProducts ? (
+              {isLoadingOwnerProducts ||
+              isLoadingCreateProduct ||
+              isLoadingUpdateStatus ||
+              isLoadingDeleteProductRelation ? (
                 <Preloader />
               ) : (
                 ownerProductMatch?.map((item: OwnerProductsMatchType) => (
@@ -148,14 +169,11 @@ export default function EditModeForm() {
                 text="Сохранить выбор"
                 onClick={() => {
                   if (currentId !== 0) {
-                    console.log({
-                      dealer_product: pathId,
-                      owner_product: currentId,
-                    });
                     handleCreateProductRelation({
                       dealer_product: pathId,
                       owner_product: currentId,
                     } as ProductRelationCreateType);
+                    setIsSaveChoice(true);
                   } else {
                     alert('Выберите элемент для сохранения!!!!');
                   }
@@ -164,7 +182,10 @@ export default function EditModeForm() {
               <BasicButton
                 text="Отклонить подборку"
                 color="error"
-                onClick={updateProductStatus}
+                onClick={() => {
+                  updateProductStatus();
+                  setIsRejectChoice(true);
+                }}
               />
             </Box>
           </>

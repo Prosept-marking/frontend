@@ -63,8 +63,8 @@ export const api = createApi({
       ProductRelationItem
     >({
       query: (relationItem) => ({
-        url: `product-relation/${relationItem.id}/`,
-        method: 'DELETE',
+        url: `/dealer-products/${relationItem.id}/set_unprocessed/`,
+        method: 'PATCH',
       }),
     }),
     getOwnerProductsMatchById: build.query<
@@ -87,7 +87,7 @@ export const {
   useGetDailyStatsQuery,
   useGetDealerStatsQuery,
   useGetDealerProductsQuery,
-  useGetDealerProductIdQuery,
+  useLazyGetDealerProductIdQuery,
   useLazyFilterDealerProductsQuery,
   useLazyGetRelatedOwnerProductQuery,
   useCreateProductRelationMutation,
