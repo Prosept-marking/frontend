@@ -52,20 +52,20 @@ export default function EditModeForm() {
     triggerDealerProductIdQuery({ id: pathId });
   }, [location]);
 
-  function findNextPage() {
-    const current = dealerProductsForPages.results.find(
-      (item) => item.pk === pathId,
-    );
+  // function findNextPage() {
+  //   const current = dealerProductsForPages.results.find(
+  //     (item) => item.pk === pathId,
+  //   );
 
-    const next =
-      dealerProductsForPages.results[
-        dealerProductsForPages.results.indexOf(current!) + 1
-      ];
+  //   const next =
+  //     dealerProductsForPages.results[
+  //     dealerProductsForPages.results.indexOf(current!) + 1
+  //     ];
 
-    if (dealerProductsForPages.results.length !== 0) return next.pk;
+  //   if (dealerProductsForPages.results.length !== 0) return next.pk;
 
-    return 1;
-  }
+  //   return 1;
+  // }
 
   const [
     triggerRelatedOwnerProductQuery,
@@ -87,8 +87,7 @@ export default function EditModeForm() {
   const [updateDealerProductsStatus, { isLoading: isLoadingUpdateStatus }] =
     useUpdateDealerProductsStatusMutation();
 
-  const [changeDealerProductStatus, { isLoading: isLoadingChangeStatus }] =
-    useChangeDealerProductStatusMutation();
+  const [changeDealerProductStatus] = useChangeDealerProductStatusMutation();
 
   useEffect(() => {
     if (dealerCardData?.combined_status === 'matched') {
@@ -173,7 +172,6 @@ export default function EditModeForm() {
       case 'unprocessed':
         return (
           <>
-            {' '}
             {isLoadingOwnerProducts ||
             isLoadingCreateProduct ||
             isLoadingUpdateStatus ||
@@ -231,16 +229,20 @@ export default function EditModeForm() {
 
       case 'postponed':
         return (
-          <>
+          <Stack
+            gap={5}
+            alignItems={'flex-start'}
+            justifyContent={'space-between'}
+          >
             <ResultBox result={false}></ResultBox>
             <BasicButton
               text="Сравнить заново"
-              color="info"
+              color="success"
               onClick={() => {
                 handleRecomparison();
               }}
             />
-          </>
+          </Stack>
         );
 
       case 'matched':

@@ -4,10 +4,10 @@ import {
   CardActions,
   CardContent,
   Typography,
-  Skeleton,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { DealerCardType } from '../../models/models';
+import Preloader from '../Preloader';
 
 export const DealerCard = ({
   data,
@@ -17,7 +17,7 @@ export const DealerCard = ({
   isLoading: boolean;
 }) => {
   return isLoading ? (
-    <Skeleton variant="rounded" width={450} height={280} />
+    <Preloader />
   ) : !data ? (
     <Typography variant="h5" component="div">
       Данные не загружены

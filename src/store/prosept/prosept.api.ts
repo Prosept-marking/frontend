@@ -9,7 +9,6 @@ import {
   DailyStatsType,
   DealerStatsDataType,
 } from '../../models/models';
-import { current } from 'immer';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -64,8 +63,6 @@ export const api = createApi({
       ProductRelationItem
     >({
       query: (relationItem) => ({
-        /*url: `/dealer-products/${relationItem.id}/set_unprocessed/`,
-        method: 'PATCH',*/
         url: `/product-relation/delete-product-relation-by-dealer-product/${relationItem.id}/`,
         method: 'DELETE',
       }),

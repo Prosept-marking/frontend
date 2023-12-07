@@ -90,7 +90,7 @@ export default function FilterList({
           <InputLabel>Дилер</InputLabel>
           <Controller
             render={({ field }) => (
-              <Select {...field} label="Дилер">
+              <Select {...field} label="Дилер" aria-label="Дилер">
                 <MenuItem value="">Снять выбор</MenuItem>
                 {dealersFilters?.results.map((item: any) => {
                   return (
@@ -109,7 +109,7 @@ export default function FilterList({
           <InputLabel>Статус</InputLabel>
           <Controller
             render={({ field }) => (
-              <Select {...field} label="Статус">
+              <Select {...field} label="Статус" area-label="Статус">
                 {filtersStatus.map((item) => {
                   return (
                     <MenuItem key={item.label} value={item.value}>
@@ -127,7 +127,7 @@ export default function FilterList({
           <InputLabel>Дата</InputLabel>
           <Controller
             render={({ field }) => (
-              <Select {...field} label="Дата">
+              <Select {...field} label="Дата" area-label="Дата">
                 {filtersDate.map((item) => {
                   return (
                     <MenuItem key={item.value} value={item.value}>
