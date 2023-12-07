@@ -169,7 +169,7 @@ export default function MainTable({
                       {findStatus(item?.combined_status)}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {item.name_1c_owner}
+                      {item.combined_status === 'matched' && item.name_1c_owner}
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       <Link to={item.product_url} target="_blank">
@@ -193,7 +193,7 @@ export default function MainTable({
                         text="Перейти в режим разметки"
                         variant="contained"
                         onClick={() =>
-                          navigate(`/compare/${item.pk}`, { replace: true })
+                          navigate(`/compare/${item.pk}`, { replace: false })
                         }
                       />
                     </StyledTableCell>

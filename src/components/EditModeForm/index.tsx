@@ -12,7 +12,7 @@ import {
 import {
   useDeleteProductRelationIdMutation,
   useGetDealerProductIdQuery,
-  useLazyGetProductRelationIdQuery,
+  useLazyGetRelatedOwnerProductQuery,
   useGetOwnerProductsMatchByIdQuery,
   useUpdateDealerProductsStatusMutation,
   useCreateProductRelationMutation,
@@ -61,9 +61,9 @@ export default function EditModeForm() {
   }
 
   const [
-    triggerRelationDataQuery,
+    triggerRelatedOwnerProductQuery,
     { data: relationData, isFetching: isLoadindRelationData },
-  ] = useLazyGetProductRelationIdQuery();
+  ] = useLazyGetRelatedOwnerProductQuery();
 
   const [createProductRelation] = useCreateProductRelationMutation();
   const [deleteProductRelationId] = useDeleteProductRelationIdMutation();
@@ -75,7 +75,9 @@ export default function EditModeForm() {
 
   useEffect(() => {
     if (dealerCardData?.combined_status === 'matched') {
-      triggerRelationDataQuery({ id: pathId });
+      triggerRelatedOwnerProductQuery({
+        id: dealerCardData?.pk_owner_product || 0,
+      });
     }
   }, [dealerCardData]);
 
@@ -178,7 +180,7 @@ export default function EditModeForm() {
         return (
           <>
             <ResultBox
-              data={relationData?.owner_product}
+              data={relationData}
               result={true}
               isLoadindRelationData={isLoadindRelationData}
             ></ResultBox>
@@ -238,7 +240,7 @@ export default function EditModeForm() {
               variant="outlined"
               type="button"
               onClick={() => {
-                navigate(`/compare/${pathId - 1}`);
+                navigate(`/compare/${pathId - 1}`, { replace: false });
                 setCurrentId(0);
               }}
             />
@@ -247,7 +249,7 @@ export default function EditModeForm() {
               variant="outlined"
               type="button"
               onClick={() => {
-                navigate(`/compare/${pathId + 1}`);
+                navigate(`/compare/${pathId + 1}`, { replace: false });
                 setCurrentId(0);
               }}
             />

@@ -6,6 +6,8 @@ import {
   DealerCardType,
   OwnerProductsMatchType,
   ProductRelationCreateType,
+  DailyStatsType,
+  DealerStatsDataType,
 } from '../../models/models';
 
 export const api = createApi({
@@ -15,6 +17,12 @@ export const api = createApi({
     getDealers: build.query<DealersType, void>({
       query: () => 'dealer-names/',
     }),
+    getDailyStats: build.query<DailyStatsType, void>({
+      query: () => 'daily-statistic/',
+    }),
+    getDealerStats: build.query<DealerStatsDataType, void>({
+      query: () => 'dealers-statistic/',
+    }),
     getDealerProducts: build.query<
       DealerProductsType,
       { limit: number; page_size: number }
@@ -22,9 +30,8 @@ export const api = createApi({
       query: ({ limit, page_size }) =>
         `dealer-products/?limit=${limit}&page_size=${page_size}`,
     }),
-
     getDealerProductId: build.query<DealerCardType, { id: number }>({
-      query: ({ id }) => `/dealer-products/${id}/`,
+      query: ({ id }) => `dealer-products/${id}/`,
     }),
     filterDealerProducts: build.query<DealerProductsType, any>({
       query: ({ dealer_id, days, combined_status, limit, page_size = 20 }) => ({
@@ -38,15 +45,15 @@ export const api = createApi({
         },
       }),
     }),
-    getProductRelationId: build.query<any, { id: number }>({
-      query: ({ id }) => `/product-relation/${id}/`,
+    getRelatedOwnerProduct: build.query<any, { id: number }>({
+      query: ({ id }) => `owner-products/${id}/`,
     }),
     createProductRelation: build.mutation<
       ProductRelationCreateType,
       ProductRelationCreateType
     >({
       query: (relationItem) => ({
-        url: `/product-relation/`,
+        url: `product-relation/`,
         method: 'POST',
         body: relationItem,
       }),
@@ -56,7 +63,7 @@ export const api = createApi({
       ProductRelationItem
     >({
       query: (relationItem) => ({
-        url: `/product-relation/${relationItem.id}`,
+        url: `product-relation/${relationItem.id}/`,
         method: 'DELETE',
       }),
     }),
@@ -64,11 +71,11 @@ export const api = createApi({
       OwnerProductsMatchType[],
       { id: number }
     >({
-      query: ({ id }) => `/owner-products/match_product/${id}/`,
+      query: ({ id }) => `owner-products/match_product/${id}/`,
     }),
     updateDealerProductsStatus: build.mutation<DealerCardType, { id: number }>({
       query: (currentItem) => ({
-        url: `/dealer-products/${currentItem.id}/set_postponed/`,
+        url: `dealer-products/${currentItem.id}/set_postponed/`,
         method: 'PATCH',
       }),
     }),
@@ -77,10 +84,12 @@ export const api = createApi({
 
 export const {
   useGetDealersQuery,
+  useGetDailyStatsQuery,
+  useGetDealerStatsQuery,
   useGetDealerProductsQuery,
   useGetDealerProductIdQuery,
   useLazyFilterDealerProductsQuery,
-  useLazyGetProductRelationIdQuery,
+  useLazyGetRelatedOwnerProductQuery,
   useCreateProductRelationMutation,
   useDeleteProductRelationIdMutation,
   useGetOwnerProductsMatchByIdQuery,

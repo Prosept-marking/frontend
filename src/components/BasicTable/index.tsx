@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { DealerStatsResultsDataType } from '../../models/models';
 
 import {
   Paper,
@@ -39,37 +40,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  hhh: number,
-) {
-  return { name, calories, fat, carbs, hhh };
-}
+type BasicTableProps = {
+  dealerData: DealerStatsResultsDataType[];
+};
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6, 24, 50),
-  createData('Ice cream sandwich', 237, 9, 37, 50),
-  createData('Eclair', 262, 16, 24, 50),
-  createData('Cupcake', 305, 3, 67, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-  createData('Gingerbread', 356, 16, 49, 50),
-];
-
-export default function BasicTable() {
+export default function BasicTable({ dealerData }: BasicTableProps) {
   return (
     <>
       <Typography variant="h5" component="h2" gutterBottom color="primary">
@@ -92,21 +67,31 @@ export default function BasicTable() {
               </StyledTableCell>
             </StyledTableRow>
           </TableHead>
+
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow
-                key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                <StyledTableCell align="right">{row.hhh}</StyledTableCell>
-              </StyledTableRow>
-            ))}
+            {dealerData &&
+              dealerData.map((item) => (
+                <StyledTableRow
+                  key={item.saller_name}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <StyledTableCell component="th" scope="row">
+                    {item.saller_name}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {item.verified_product}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {item.unverified_product}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {item.rejected_product}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {item.all_product}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

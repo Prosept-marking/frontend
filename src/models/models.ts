@@ -85,3 +85,45 @@ export type ProductRelationCreateType = {
   dealer_product: number;
   owner_product: number;
 };
+
+export type DailyStatsType = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Array<{
+    date: string;
+    daily_unverified_product: number;
+    unverified_product: number;
+    verified_product: number;
+    rejected_product: number;
+  }>;
+};
+
+export type DailyStatsDataType = {
+  date: string;
+  daily_unverified_product: number;
+  unverified_product: number;
+  verified_product: number;
+  rejected_product: number;
+};
+
+export type DealerStatsDataType = {
+  count: number;
+  next: any;
+  previous: any;
+  results: Array<{
+    saller_name: number;
+    verified_product: number;
+    unverified_product: number;
+    rejected_product: number;
+    all_product: number;
+  }>;
+};
+
+export type DealerStatsResultsDataType = {
+  saller_name: number;
+  verified_product: number;
+  unverified_product: number;
+  rejected_product: number;
+  all_product: number;
+};
