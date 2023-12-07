@@ -134,9 +134,9 @@ export default function EditModeForm() {
                 ownerProductMatch?.map((item: OwnerProductsMatchType) => (
                   <ProductCard
                     data={item}
-                    key={item.owner_id}
+                    key={item.id}
                     onClick={handleCurrentElement}
-                    owner_id={item.owner_id}
+                    id={item.id}
                   />
                 ))
               )}

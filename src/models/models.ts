@@ -72,7 +72,7 @@ export type DealerProductIdType = {
 };
 
 export type OwnerProductsMatchType = {
-  owner_id: number;
+  id: number;
   article?: number;
   ean_13?: number;
   name_1c?: string;

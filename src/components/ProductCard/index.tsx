@@ -4,7 +4,7 @@ import { Box, CardContent, Typography } from '@mui/material';
 
 export const ProductCard: FC<{
   onClick?: (event: React.MouseEvent) => void;
-  owner_id?: number;
+  id?: number;
   data?: {
     article?: number;
     ean_13?: number;
@@ -13,7 +13,7 @@ export const ProductCard: FC<{
     recommended_price?: number;
     category_id?: number;
   };
-}> = ({ data, onClick, owner_id }) => {
+}> = ({ data, onClick, id }) => {
   return (
     <Paper
       className="productCard"
@@ -39,7 +39,7 @@ export const ProductCard: FC<{
               sx={{ fontSize: 14 }}
               color="text.disabled"
             >
-              id: {owner_id}
+              id: {id}
             </Typography>
             <Typography sx={{ fontSize: 14, mb: 1.5 }} color="text.disabled">
               Название товара (1С):
@@ -68,10 +68,3 @@ export const ProductCard: FC<{
     </Paper>
   );
 };
-
-// артикул товара (article)
-// код товара (ean_13)
-// название товара (name_1c)
-// стоимость (cost)
-// рекомендованная цена (recommended_price)
-// категория товара (category_id)
