@@ -5,16 +5,28 @@ import {
   useGetDailyStatsQuery,
   useGetDealerStatsQuery,
 } from '../../store/prosept/prosept.api';
+import Preloader from '../../components/Preloader';
 
 export default function Statistics() {
-  const { data: dailyData } = useGetDailyStatsQuery();
-  const { data: dealerData } = useGetDealerStatsQuery();
+  const { data: dailyData, isFetching: isDailyDataLoading } =
+    useGetDailyStatsQuery();
+  const { data: dealerData, isFetching: isDealerDataLoading } =
+    useGetDealerStatsQuery();
 
+  console.log(isDealerDataLoading);
   return (
     <>
       <Stack flexDirection={'column'} alignItems={'flex-start'}>
-        {dailyData && <TodayChart dailyStats={dailyData} />}
-        {dealerData && <BasicTable dealerData={dealerData.results} />}
+        {isDailyDataLoading ? (
+          <Preloader />
+        ) : (
+          dailyData && <TodayChart dailyStats={dailyData} />
+        )}
+        {isDealerDataLoading ? (
+          <Preloader />
+        ) : (
+          dealerData && <BasicTable dealerData={dealerData.results} />
+        )}
       </Stack>
     </>
   );

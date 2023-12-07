@@ -9,13 +9,7 @@ export const ResultBox: FC<{
   isLoadindRelationData?: boolean;
 }> = ({ data, result, isLoadindRelationData }) => {
   return (
-    <Box
-      display={'flex'}
-      gap={1}
-      flexDirection={'column'}
-      maxWidth={'sm'}
-      alignItems={'center'}
-    >
+    <Box display={'flex'} gap={1} flexDirection={'column'} maxWidth={'sm'}>
       <Typography
         sx={{ fontSize: 30, mb: 1.5 }}
         color={result ? 'text.secondary' : 'error'}

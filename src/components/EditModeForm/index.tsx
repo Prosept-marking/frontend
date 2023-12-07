@@ -173,55 +173,59 @@ export default function EditModeForm() {
       case 'unprocessed':
         return (
           <>
-            <Typography variant="h4">Выберите товар производителя</Typography>
-            <Box
-              display={'flex'}
-              flexDirection={'row'}
-              flexWrap={'wrap'}
-              gap={5}
-              maxWidth={'100%'}
-              flexShrink={1}
-            >
-              {isLoadingOwnerProducts ||
-              isLoadingCreateProduct ||
-              isLoadingUpdateStatus ||
-              isLoadingDeleteProductRelation ||
-              isLoadingChangeStatus ? (
-                <Preloader />
-              ) : (
-                ownerProductMatch?.map((item: OwnerProductsMatchType) => (
-                  <ProductCard
-                    data={item}
-                    key={item.id}
-                    onClick={handleCurrentElement}
-                    id={item.id}
+            {' '}
+            {isLoadingOwnerProducts ||
+            isLoadingCreateProduct ||
+            isLoadingUpdateStatus ||
+            isLoadingDeleteProductRelation ? (
+              <Preloader />
+            ) : (
+              <>
+                <Typography variant="h4">
+                  Выберите товар производителя
+                </Typography>
+                <Box
+                  display={'flex'}
+                  flexDirection={'row'}
+                  flexWrap={'wrap'}
+                  gap={5}
+                  maxWidth={'100%'}
+                  flexShrink={1}
+                >
+                  {ownerProductMatch?.map((item: OwnerProductsMatchType) => (
+                    <ProductCard
+                      data={item}
+                      key={item.id}
+                      onClick={handleCurrentElement}
+                      id={item.id}
+                    />
+                  ))}
+                </Box>
+                <Box display={'flex'} flexDirection={'row'} columnGap={2}>
+                  <BasicButton
+                    text="Сохранить выбор"
+                    onClick={() => {
+                      if (currentId !== 0) {
+                        handleCreateProductRelation({
+                          dealer_product: pathId,
+                          owner_product: currentId,
+                        } as ProductRelationCreateType);
+                        setIsSaveChoice(true);
+                      } else {
+                        alert('Выберите элемент для сохранения!!!!');
+                      }
+                    }}
                   />
-                ))
-              )}
-            </Box>
-            <Box display={'flex'} flexDirection={'row'} columnGap={2}>
-              <BasicButton
-                text="Сохранить выбор"
-                onClick={() => {
-                  if (currentId !== 0) {
-                    handleCreateProductRelation({
-                      dealer_product: pathId,
-                      owner_product: currentId,
-                    } as ProductRelationCreateType);
-                    setIsSaveChoice(true);
-                  } else {
-                    alert('Выберите элемент для сохранения!!!!');
-                  }
-                }}
-              />
-              <BasicButton
-                text="Отклонить подборку"
-                color="error"
-                onClick={() => {
-                  updateProductStatus();
-                }}
-              />
-            </Box>
+                  <BasicButton
+                    text="Отклонить подборку"
+                    color="error"
+                    onClick={() => {
+                      updateProductStatus();
+                    }}
+                  />
+                </Box>
+              </>
+            )}
           </>
         );
 
@@ -241,7 +245,7 @@ export default function EditModeForm() {
 
       case 'matched':
         return (
-          <>
+          <Stack gap={5} alignItems={'flex-start'}>
             <ResultBox
               data={relationData}
               result={true}
@@ -249,7 +253,7 @@ export default function EditModeForm() {
             ></ResultBox>
             <BasicButton
               text="Отменить сопоставление"
-              color="error"
+              color="warning"
               onClick={renderComponent}
             />
             {isRenderComponent && (
@@ -259,7 +263,7 @@ export default function EditModeForm() {
                 isOpenPopup={true}
               />
             )}
-          </>
+          </Stack>
         );
     }
   }
@@ -294,6 +298,7 @@ export default function EditModeForm() {
           position={'sticky'}
           top={100}
           flexShrink={0}
+          width={'20vw'}
         >
           <Typography variant="h4">Товар дилера</Typography>
           <DealerCard data={dealerCardData} isLoading={isLoadingDealerCard} />
@@ -322,7 +327,7 @@ export default function EditModeForm() {
         <Divider orientation="vertical" flexItem sx={{ fontSize: 40 }}>
           ⇒
         </Divider>
-        <Box display={'flex'} flexDirection={'column'} gap={5}>
+        <Box display={'flex'} flexDirection={'column'} gap={5} width={'60vw'}>
           {dealerCardData?.combined_status &&
             setResponceVariant(dealerCardData.combined_status)}
         </Box>
