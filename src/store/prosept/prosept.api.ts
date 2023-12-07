@@ -92,6 +92,6 @@ export const {
   useLazyGetRelatedOwnerProductQuery,
   useCreateProductRelationMutation,
   useDeleteProductRelationIdMutation,
-  useGetOwnerProductsMatchByIdQuery,
+  useLazyGetOwnerProductsMatchByIdQuery,
   useUpdateDealerProductsStatusMutation,
 } = api;

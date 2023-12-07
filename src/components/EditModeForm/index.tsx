@@ -13,7 +13,7 @@ import {
   useDeleteProductRelationIdMutation,
   useLazyGetDealerProductIdQuery,
   useLazyGetRelatedOwnerProductQuery,
-  useGetOwnerProductsMatchByIdQuery,
+  useLazyGetOwnerProductsMatchByIdQuery,
   useUpdateDealerProductsStatusMutation,
   useCreateProductRelationMutation,
 } from '../../store/prosept/prosept.api';
@@ -75,8 +75,10 @@ export default function EditModeForm() {
     { isLoading: isLoadingDeleteProductRelation },
   ] = useDeleteProductRelationIdMutation();
 
-  const { data: ownerProductMatch, isFetching: isLoadingOwnerProducts } =
-    useGetOwnerProductsMatchByIdQuery({ id: pathId });
+  const [
+    triggerOwnerProductMatch,
+    { data: ownerProductMatch, isFetching: isLoadingOwnerProducts },
+  ] = useLazyGetOwnerProductsMatchByIdQuery();
 
   const [updateDealerProductsStatus, { isLoading: isLoadingUpdateStatus }] =
     useUpdateDealerProductsStatusMutation();
@@ -85,6 +87,14 @@ export default function EditModeForm() {
     if (dealerCardData?.combined_status === 'matched') {
       triggerRelatedOwnerProductQuery({
         id: dealerCardData?.pk_owner_product || 0,
+      });
+    }
+  }, [dealerCardData]);
+
+  useEffect(() => {
+    if (dealerCardData?.combined_status === 'unprocessed') {
+      triggerOwnerProductMatch({
+        id: pathId,
       });
     }
   }, [dealerCardData]);
@@ -136,7 +146,7 @@ export default function EditModeForm() {
 
   function setResponceVariant(status: string) {
     switch (status) {
-      case 'unprocessed': {
+      case 'unprocessed':
         return (
           <>
             <Typography variant="h4">Выберите товар производителя</Typography>
@@ -190,7 +200,7 @@ export default function EditModeForm() {
             </Box>
           </>
         );
-      }
+
       case 'postponed':
         return (
           <ResultBox result={false}></ResultBox>
