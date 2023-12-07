@@ -46,6 +46,10 @@ export default function EditModeForm() {
 
   // console.log("массив", dealerProductsForPages);
 
+  useEffect(() => {
+    triggerDealerProductIdQuery({ id: pathId });
+  }, [location]);
+
   function findNextPage() {
     const current = dealerProductsForPages.results.find(
       (item) => item.pk === pathId,
