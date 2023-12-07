@@ -49,18 +49,7 @@ export default function Navigation() {
             Главная
           </NavLink>
         </li>
-        <li className="navigation-list__item">
-          <NavLink
-            className={({ isActive }) =>
-              !isActive
-                ? 'navigation-link'
-                : 'navigation-link navigation-link_active'
-            }
-            to="/compare"
-          >
-            Поиск совпадений
-          </NavLink>
-        </li>
+
         <li className="navigation-list__item">
           <NavLink
             className={({ isActive }) =>

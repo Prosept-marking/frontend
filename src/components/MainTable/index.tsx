@@ -149,7 +149,7 @@ export default function MainTable({
                   <StyledTableCell align="center">Цена</StyledTableCell>
                   <StyledTableCell align="center">Дилер</StyledTableCell>
                   <StyledTableCell align="center">
-                    Дата последней записи
+                    Дата получения записи
                   </StyledTableCell>
 
                   <StyledTableCell align="center">
@@ -183,7 +183,7 @@ export default function MainTable({
                       {item.dealer_name}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {item.real_date}
+                      {item.date}
                     </StyledTableCell>
 
                     <StyledTableCell align="center">

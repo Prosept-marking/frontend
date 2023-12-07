@@ -73,7 +73,7 @@ export default function BasicTable() {
   return (
     <>
       <Typography variant="h5" component="h2" gutterBottom color="primary">
-        Статистика сопоставлений по дилеру
+        Статистика сопоставлений по дилерам
       </Typography>
       <TableContainer component={Paper} sx={{ maxHeight: '50vh' }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>

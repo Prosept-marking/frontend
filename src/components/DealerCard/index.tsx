@@ -35,7 +35,7 @@ export const DealerCard = ({
           Цена: {data.price}
         </Typography>
         <Typography variant="body2">
-          Дата получения записи: {data.real_date}
+          Дата получения записи: {data.date}
         </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Дилер: {data.dealer_name}

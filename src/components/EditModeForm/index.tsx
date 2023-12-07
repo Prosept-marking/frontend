@@ -22,6 +22,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ResultBox } from '../ResultBox';
 import { useEffect, useState } from 'react';
+import Preloader from '../Preloader';
 
 export default function EditModeForm() {
   const navigate = useNavigate();
@@ -31,9 +32,10 @@ export default function EditModeForm() {
   const relationItem: ProductRelationItem = { id: pathId };
   const [currentId, setCurrentId] = useState<number>(0);
 
-  const { data: dealerCardData, isLoading } = useGetDealerProductIdQuery({
-    id: pathId,
-  });
+  const { data: dealerCardData, isFetching: isLoadingDealerCard } =
+    useGetDealerProductIdQuery({
+      id: pathId,
+    });
 
   const dealerProductsForPages = useSelector(
     (state: RootState) => state.dealerProducts.dealerProducts,
@@ -66,7 +68,8 @@ export default function EditModeForm() {
   const [createProductRelation] = useCreateProductRelationMutation();
   const [deleteProductRelationId] = useDeleteProductRelationIdMutation();
 
-  const ownerProductMatch = useGetOwnerProductsMatchByIdQuery({ id: pathId });
+  const { data: ownerProductMatch, isFetching: isLoadingOwnerProducts } =
+    useGetOwnerProductsMatchByIdQuery({ id: pathId });
 
   const [updateDealerProductsStatus] = useUpdateDealerProductsStatusMutation();
 
@@ -125,15 +128,18 @@ export default function EditModeForm() {
               maxWidth={'100%'}
               flexShrink={1}
             >
-              {ownerProductMatch.status === 'fulfilled' &&
-                ownerProductMatch.data?.map((item: OwnerProductsMatchType) => (
+              {isLoadingOwnerProducts ? (
+                <Preloader />
+              ) : (
+                ownerProductMatch?.map((item: OwnerProductsMatchType) => (
                   <ProductCard
                     data={item}
                     key={item.owner_id}
                     onClick={handleCurrentElement}
                     owner_id={item.owner_id}
                   />
-                ))}
+                ))
+              )}
             </Box>
             <Box display={'flex'} flexDirection={'row'} columnGap={2}>
               <BasicButton
@@ -171,7 +177,11 @@ export default function EditModeForm() {
       case 'matched':
         return (
           <>
-            <ResultBox data={relationData} result={true}></ResultBox>
+            <ResultBox
+              data={relationData?.owner_product}
+              result={true}
+              isLoadindRelationData={isLoadindRelationData}
+            ></ResultBox>
             <BasicButton
               text="Отменить сопоставление"
               color="error"
@@ -221,7 +231,7 @@ export default function EditModeForm() {
           flexShrink={0}
         >
           <Typography variant="h4">Товар дилера</Typography>
-          <DealerCard data={dealerCardData} isLoading={isLoading} />
+          <DealerCard data={dealerCardData} isLoading={isLoadingDealerCard} />
           <Box display={'flex'} flexDirection={'row'} gap={5}>
             <BasicButton
               text="Предыдущий товар"

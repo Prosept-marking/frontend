@@ -1,11 +1,13 @@
 import { FC } from 'react';
 import { Box, Typography } from '@mui/material';
 import { ProductCard } from '../ProductCard';
+import Preloader from '../Preloader';
 
 export const ResultBox: FC<{
   data?: any;
   result: boolean;
-}> = ({ data, result }) => {
+  isLoadindRelationData?: boolean;
+}> = ({ data, result, isLoadindRelationData }) => {
   return (
     <Box
       display={'flex'}
@@ -22,7 +24,11 @@ export const ResultBox: FC<{
           ? `Товар сопоставленный оператором:`
           : `Подборка была отклонена оператором`}
       </Typography>
-      {result && <ProductCard data={data} />}
+      {isLoadindRelationData ? (
+        <Preloader />
+      ) : (
+        result && <ProductCard data={data} />
+      )}
     </Box>
   );
 };

@@ -5,7 +5,7 @@ export type DealerCardType = {
   price: string;
   product_url: string;
   product_name: string;
-  real_date: string;
+  date: string;
   matched: boolean;
   postponed: boolean;
   combined_status: string;
