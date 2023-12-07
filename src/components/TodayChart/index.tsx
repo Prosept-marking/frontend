@@ -68,7 +68,8 @@ export default function TodayChart({
           legend: {
             direction: 'column',
             position: { vertical: 'middle', horizontal: 'left' },
-            padding: 15,
+            padding: 5,
+            markGap: 5,
           },
         }}
         height={220}
