@@ -3,10 +3,12 @@ import { FormValues } from '../../models/models';
 
 interface proseptState {
   filters: FormValues;
+  page: number;
 }
 
 const initialState: proseptState = {
   filters: { dealer_id: '', days: '', combined_status: '' },
+  page: 1,
 };
 
 export const proseptSlice = createSlice({
@@ -18,6 +20,9 @@ export const proseptSlice = createSlice({
     },
     clearFilters(state) {
       state.filters = { dealer_id: '', days: '', combined_status: '' };
+    },
+    setPage(state, action: PayloadAction<number>) {
+      state.page = action.payload;
     },
   },
 });

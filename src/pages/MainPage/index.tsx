@@ -9,7 +9,6 @@ import { useActions } from '../../hooks/actions';
 
 export default function MainPage() {
   const [limit, setLimit] = useState<number>(1);
-  const [page, setPage] = useState(1);
 
   const [
     triggerFiltersQuery,
@@ -17,17 +16,17 @@ export default function MainPage() {
   ] = useLazyFilterDealerProductsQuery();
 
   const filterValues = useSelector((state: RootState) => state.prosept.filters);
-
-  const { setDealerProducts } = useActions();
+  const { setDealerProducts, setPage } = useActions();
+  const page = useSelector((state: RootState) => state.prosept.page);
 
   useEffect(() => {
     if (filterValues !== null) {
-      triggerFiltersQuery({ ...filterValues, limit: limit, page_size: 20 });
+      triggerFiltersQuery({ ...filterValues, limit: page, page_size: 20 });
     }
     if (filteredDealerProducts !== undefined) {
       setDealerProducts(filteredDealerProducts);
     }
-  }, [filterValues, limit, filteredDealerProducts]);
+  }, [filterValues, page, filteredDealerProducts]);
 
   const handleFiltersClick = (filters: any) => {
     setLimit(1);
@@ -36,7 +35,7 @@ export default function MainPage() {
   };
 
   const handleFiltersReset = () => {
-    triggerFiltersQuery({ ...filterValues, limit: limit, page_size: 20 });
+    triggerFiltersQuery({ ...filterValues, limit: page, page_size: 20 });
     setPage(1);
   };
 
@@ -52,8 +51,6 @@ export default function MainPage() {
         setLimit={setLimit}
         limit={limit}
         isLoadingFiltered={isLoadingFiltered}
-        page={page}
-        setPage={setPage}
       />
     </main>
   );

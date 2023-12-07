@@ -22,6 +22,9 @@ import NeedsCompareIcon from '../../assets/icons/NeedsCompareIcon';
 
 import { DealerCardType } from '../../models/models';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { useActions } from '../../hooks/actions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -85,18 +88,17 @@ export default function MainTable({
   count,
   setLimit,
   isLoadingFiltered,
-  page,
-  setPage,
 }: {
   data: DealerCardType[];
   count: number;
   setLimit: React.Dispatch<React.SetStateAction<number>>;
   isLoadingFiltered: boolean;
   limit: number;
-  page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const navigate = useNavigate();
+
+  const page = useSelector((state: RootState) => state.prosept.page);
+  const { setPage } = useActions();
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
