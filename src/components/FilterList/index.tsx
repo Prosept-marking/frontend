@@ -9,40 +9,65 @@ import {
 import { BasicButton } from '../BasicButton';
 import { useForm, Controller } from 'react-hook-form';
 import type { SubmitHandler, DefaultValues } from 'react-hook-form';
-import { useGetDealersQuery } from '../../utils/api';
-
-export type FormValues = {
-  dealer: string;
-  date: string;
-  status: string;
-};
+import { useGetDealersQuery } from '../../store/prosept/prosept.api';
+import { useActions } from '../../hooks/actions';
+import { useEffect } from 'react';
+import { FormValues } from '../../models/models';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const filtersDate = [
-  { value: 'day', label: 'День' },
-  { value: 'week', label: 'Неделя' },
-  { value: 'month', label: 'Месяц' },
+  { value: '', label: 'Снять выбор' },
+  { value: '1', label: 'День' },
+  { value: '7', label: 'Неделя' },
+  { value: '30', label: 'Месяц' },
 ];
 
 const filtersStatus = [
-  { value: 'true', label: 'Есть сопоставление' },
-  { value: 'false', label: 'Нет сопоставления' },
+  { value: '', label: 'Снять выбор' },
+  { value: 'matched', label: 'Есть сопоставление' },
+  { value: 'unprocessed', label: 'Нет сопоставления' },
+  { value: 'postponed', label: 'Выборка отклонена' },
 ];
 
-export const defaultValues: DefaultValues<FormValues> = {
-  dealer: '',
-  date: '',
-  status: '',
+let defaultValues: DefaultValues<FormValues> = {
+  dealer_id: '',
+  days: '',
+  combined_status: '',
 };
 
-export default function FilterList() {
+export default function FilterList({
+  handleFiltersClick,
+  handleFiltersReset,
+}: {
+  handleFiltersClick: (data: FormValues) => void;
+  handleFiltersReset: () => void;
+}) {
   const { handleSubmit, reset, control } = useForm<FormValues>({
     defaultValues,
   });
 
-  const { data } = useGetDealersQuery();
+  const filterValues = useSelector((state: RootState) => state.prosept.filters);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    alert(JSON.stringify(data));
+  useEffect(() => {
+    if (filterValues) {
+      defaultValues = filterValues;
+    }
+  }, [filterValues]);
+
+  const { data: dealersFilters } = useGetDealersQuery();
+  const { setFilters, clearFilters } = useActions();
+
+  const onSubmit: SubmitHandler<FormValues> = (filterData) => {
+    handleFiltersClick(filterData);
+    setFilters(filterData);
+  };
+
+  const resetFilters = () => {
+    clearFilters();
+    handleFiltersReset();
+    defaultValues = { dealer_id: '', days: '', combined_status: '' };
+    reset(defaultValues);
   };
 
   return (
@@ -53,7 +78,7 @@ export default function FilterList() {
         justifyContent="center"
         alignItems="center"
         alignContent="center"
-        margin={5}
+        margin={2}
         padding={3}
         gap={5}
         direction="row"
@@ -65,17 +90,18 @@ export default function FilterList() {
           <InputLabel>Дилер</InputLabel>
           <Controller
             render={({ field }) => (
-              <Select {...field} label="Дилер">
-                {data?.results.map((item: any) => {
+              <Select {...field} label="Дилер" aria-label="Дилер">
+                <MenuItem value="">Снять выбор</MenuItem>
+                {dealersFilters?.results.map((item: any) => {
                   return (
-                    <MenuItem key={item.dealer_id} value={item.dealer_id}>
+                    <MenuItem key={item.pk} value={item.pk}>
                       {item.name}
                     </MenuItem>
                   );
                 })}
               </Select>
             )}
-            name="dealer"
+            name="dealer_id"
             control={control}
           />
         </FormControl>
@@ -83,7 +109,7 @@ export default function FilterList() {
           <InputLabel>Статус</InputLabel>
           <Controller
             render={({ field }) => (
-              <Select {...field} label="Статус">
+              <Select {...field} label="Статус" area-label="Статус">
                 {filtersStatus.map((item) => {
                   return (
                     <MenuItem key={item.label} value={item.value}>
@@ -93,7 +119,7 @@ export default function FilterList() {
                 })}
               </Select>
             )}
-            name="status"
+            name="combined_status"
             control={control}
           />
         </FormControl>
@@ -101,7 +127,7 @@ export default function FilterList() {
           <InputLabel>Дата</InputLabel>
           <Controller
             render={({ field }) => (
-              <Select {...field} label="Дата">
+              <Select {...field} label="Дата" area-label="Дата">
                 {filtersDate.map((item) => {
                   return (
                     <MenuItem key={item.value} value={item.value}>
@@ -111,7 +137,7 @@ export default function FilterList() {
                 })}
               </Select>
             )}
-            name="date"
+            name="days"
             control={control}
           />
         </FormControl>
@@ -120,11 +146,9 @@ export default function FilterList() {
         <BasicButton
           text="Сбросить"
           type="reset"
-          onClick={() => {
-            reset(defaultValues);
-          }}
+          onClick={() => resetFilters()}
         />
-      </Stack>{' '}
+      </Stack>
     </form>
   );
 }

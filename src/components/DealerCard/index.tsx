@@ -6,14 +6,14 @@ import {
   Typography,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { DealerCardType } from '../../models/models';
 import Preloader from '../Preloader';
-import { DealerCardType } from '../../types/DealerCardType';
 
 export const DealerCard = ({
   data,
   isLoading,
 }: {
-  data: DealerCardType;
+  data?: DealerCardType;
   isLoading: boolean;
 }) => {
   return isLoading ? (
@@ -38,12 +38,14 @@ export const DealerCard = ({
           Дата получения записи: {data.date}
         </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Дилер: {data.dealer_id}
+          Дилер: {data.dealer_name}
         </Typography>
       </CardContent>
       <CardActions>
         <Link to={data.product_url} target="_blank">
-          <Button size="small">Ссылка на товар</Button>
+          <Button size="small" variant="outlined">
+            Ссылка на товар
+          </Button>
         </Link>
       </CardActions>
     </Paper>
