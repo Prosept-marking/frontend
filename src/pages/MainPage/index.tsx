@@ -16,17 +16,14 @@ export default function MainPage() {
   ] = useLazyFilterDealerProductsQuery();
 
   const filterValues = useSelector((state: RootState) => state.prosept.filters);
-  const { setDealerProducts, setPage } = useActions();
+  const { setPage } = useActions();
   const page = useSelector((state: RootState) => state.prosept.page);
 
   useEffect(() => {
     if (filterValues !== null) {
       triggerFiltersQuery({ ...filterValues, limit: page, page_size: 20 });
     }
-    if (filteredDealerProducts !== undefined) {
-      setDealerProducts(filteredDealerProducts);
-    }
-  }, [filterValues, page, filteredDealerProducts]);
+  }, [filterValues, page]);
 
   const handleFiltersClick = (filters: any) => {
     setLimit(1);

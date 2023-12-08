@@ -19,8 +19,6 @@ import {
   useChangeDealerProductStatusMutation,
 } from '../../store/prosept/prosept.api';
 
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { ResultBox } from '../ResultBox';
 import { useEffect, useState } from 'react';
 import Preloader from '../Preloader';
@@ -44,28 +42,9 @@ export default function EditModeForm() {
     { data: dealerCardData, isFetching: isLoadingDealerCard },
   ] = useLazyGetDealerProductIdQuery();
 
-  const dealerProductsForPages = useSelector(
-    (state: RootState) => state.dealerProducts.dealerProducts,
-  );
-
   useEffect(() => {
     triggerDealerProductIdQuery({ id: pathId });
   }, [location]);
-
-  // function findNextPage() {
-  //   const current = dealerProductsForPages.results.find(
-  //     (item) => item.pk === pathId,
-  //   );
-
-  //   const next =
-  //     dealerProductsForPages.results[
-  //     dealerProductsForPages.results.indexOf(current!) + 1
-  //     ];
-
-  //   if (dealerProductsForPages.results.length !== 0) return next.pk;
-
-  //   return 1;
-  // }
 
   const [
     triggerRelatedOwnerProductQuery,
